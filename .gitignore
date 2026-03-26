@@ -1,0 +1,27 @@
+# Build output
+dist/
+
+# Local Netlify folder
+.netlify/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temp files
+~$*
+
+# Claude local
+.claude/
+
+# IR images (large files)
+ir_page_*.png
+
+# Business docs (not for web)
+0. 회사제공자료/
+2. 업무/
