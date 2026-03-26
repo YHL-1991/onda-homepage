@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="description" content="다이어트배틀 자주 묻는 질문 - 배틀 참가, 상금, 계정, 부정행위 관련 FAQ">
+<meta name="theme-color" content="#E53935">
+<title>자주 묻는 질문 | 다이어트배틀</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><path d='M13 4Q27 20 13 36Q19 20 13 4Z' fill='%23E53935'/><path d='M27 4Q13 20 27 36Q21 20 27 4Z' fill='%23E53935'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --red: #E53935; --red-dark: #C62828; --red-light: #FFEBEE;
+  --dark: #111111; --gray-50: #FAFAFA; --gray-100: #F5F5F5;
+  --gray-200: #EEEEEE; --gray-600: #757575; --gray-800: #424242;
+  --white: #FFFFFF; --gradient: linear-gradient(135deg, #E53935 0%, #FF6F61 100%);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--gray-800); background: var(--white); line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+/* NAV */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px; max-width: 1140px; margin: 0 auto; padding: 0 24px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 800; font-size: 20px; color: var(--dark);
+  text-decoration: none;
+}
+.nav-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--red); font-weight: 600; font-size: 15px;
+  text-decoration: none; transition: opacity 0.2s;
+}
+.nav-back:hover { opacity: 0.7; }
+
+/* PAGE HERO */
+.page-hero {
+  padding: 140px 0 80px;
+  background: linear-gradient(135deg, #FFF8E1 0%, #FFF 60%);
+  text-align: center;
+}
+.page-hero h1 {
+  font-size: clamp(32px, 5vw, 48px); font-weight: 900; color: var(--dark);
+  margin-bottom: 16px;
+}
+.page-hero p {
+  font-size: 18px; color: var(--gray-600); max-width: 600px; margin: 0 auto;
+  word-break: keep-all;
+}
+
+/* FAQ SECTION */
+.faq-section { padding: 80px 0; }
+.faq-section:nth-child(even) { background: var(--gray-50); }
+
+/* CATEGORY HEADER */
+.faq-category {
+  max-width: 800px; margin: 0 auto 40px;
+}
+.faq-category:last-child { margin-bottom: 0; }
+.faq-category h3 {
+  font-size: 22px; font-weight: 800; color: var(--dark);
+  border-left: 4px solid var(--red); padding-left: 16px;
+  margin-bottom: 24px;
+}
+
+/* FAQ ITEMS */
+.faq-item {
+  background: var(--white); border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  margin-bottom: 12px; overflow: hidden;
+  border: 1px solid var(--gray-200);
+  transition: box-shadow 0.2s;
+}
+.faq-item:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.faq-item:last-child { margin-bottom: 0; }
+
+.faq-q {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px; cursor: pointer; gap: 16px;
+  -webkit-user-select: none; user-select: none;
+}
+.faq-q span {
+  font-size: 16px; font-weight: 600; color: var(--dark);
+  word-break: keep-all; flex: 1;
+}
+.faq-q .toggle {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--gray-100); display: flex;
+  align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background 0.2s, transform 0.3s;
+}
+.faq-q .toggle svg {
+  width: 14px; height: 14px; transition: transform 0.3s;
+}
+.faq-item.active .faq-q .toggle {
+  background: var(--red-light);
+}
+.faq-item.active .faq-q .toggle svg {
+  transform: rotate(45deg);
+}
+
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  padding: 0 24px;
+}
+.faq-item.active .faq-a {
+  max-height: 300px;
+  padding: 0 24px 24px;
+}
+.faq-a p {
+  font-size: 15px; color: var(--gray-600); line-height: 1.8;
+  word-break: keep-all;
+}
+
+/* CTA SECTION */
+.cta-section {
+  padding: 80px 0; text-align: center;
+  background: var(--gray-50);
+}
+.cta-section h2 {
+  font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 16px;
+}
+.cta-section p {
+  font-size: 16px; color: var(--gray-600); margin-bottom: 32px;
+  word-break: keep-all;
+}
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 36px; background: var(--red); color: var(--white);
+  font-size: 16px; font-weight: 700; border-radius: 12px;
+  text-decoration: none; transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 4px 16px rgba(229,57,53,0.3);
+}
+.cta-btn:hover { background: var(--red-dark); transform: translateY(-2px); }
+.cta-btn svg { width: 18px; height: 18px; }
+
+/* FOOTER */
+.footer { background: var(--dark); color: rgba(255,255,255,0.5); padding: 60px 0 40px; }
+.footer-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+.footer-brand { max-width: 340px; }
+.footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: white; margin-bottom: 16px; }
+.footer-brand p { font-size: 14px; line-height: 1.7; word-break: keep-all; }
+.footer-links h4 { color: white; font-size: 15px; margin-bottom: 16px; }
+.footer-links a { display: block; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; padding-top: 24px; text-align: center; font-size: 13px; }
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .page-hero { padding: 110px 0 50px; }
+  .faq-section { padding: 50px 0; }
+  .cta-section { padding: 50px 0; }
+  .footer-inner { flex-direction: column; gap: 32px; }
+  .faq-category h3 { font-size: 19px; }
+  .faq-q { padding: 16px 20px; }
+  .faq-q span { font-size: 15px; }
+  .faq-a { padding: 0 20px; }
+  .faq-item.active .faq-a { padding: 0 20px 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="32" height="32" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+      다이어트배틀
+    </a>
+    <a href="index.html" class="nav-back">&larr; 홈으로</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>자주 묻는 질문</h1>
+    <p>궁금한 점을 빠르게 해결하세요</p>
+  </div>
+</section>
+
+<section class="faq-section">
+  <div class="container">
+
+    <!-- 배틀 참가 관련 -->
+    <div class="faq-category">
+      <h3>배틀 참가 관련</h3>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>배틀 참가비는 얼마인가요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>배틀 종류에 따라 다르며, 최소 5,000원부터 시작합니다. 앱 내에서 진행 중인 배틀 목록과 참가비를 확인하실 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>배틀은 어떻게 진행되나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>Warm-up Week (1주) + 본 배틀 (4주)로 진행됩니다. 매일 체중 인증, 식단 기록, 운동 기록 등의 미션을 수행합니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>혼자서도 참가할 수 있나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>네, 개인 참가와 팀 참가 모두 가능합니다. 개인 배틀에서는 다른 참가자들과 개인별로 경쟁하며, 팀 배틀에서는 팀원들과 함께 목표를 달성합니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>참가 중 배틀을 포기하면 어떻게 되나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>Warm-up Week 중에는 전액 환불됩니다. 본 배틀 시작 후에는 참가비가 상금 풀에 편입되어 환불이 불가합니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>하루 인증을 놓치면 어떻게 되나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>인증을 놓친 날은 미션 미완료로 처리되어 XP를 받지 못합니다. 단, 배틀 퇴장되지는 않으며 계속 참가할 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 상금 및 보상 관련 -->
+    <div class="faq-category">
+      <h3>상금 및 보상 관련</h3>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>상금은 어떻게 받나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>배틀 종료 후 영업일 기준 7일 이내 상금 포인트로 지급되며, 등록한 계좌로 출금 가능합니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>상금에 세금이 부과되나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>네, 소득세법에 따라 기타소득세가 원천징수됩니다. 상금에서 세금을 제한 금액이 지급됩니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>XP 포인트는 어떻게 사용하나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>XP 포인트로 기프티콘(스타벅스, GS25 등), 밀키트 할인, 배틀 참가비 할인 등에 사용할 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>상금 출금 최소 금액이 있나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>최소 출금 금액은 5,000원이며, 등록된 본인 명의 계좌로만 출금 가능합니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 계정 및 이용 관련 -->
+    <div class="faq-category">
+      <h3>계정 및 이용 관련</h3>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>회원가입은 어떻게 하나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>앱 다운로드 후 휴대폰 번호 인증으로 간편하게 가입할 수 있습니다. 카카오, 네이버, 애플 소셜 로그인도 지원합니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>회원 탈퇴는 어떻게 하나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>앱 내 설정 > 회원 탈퇴를 통해 가능합니다. 진행 중인 배틀이 있는 경우 배틀 종료 후 탈퇴가 처리됩니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>개인정보는 안전하게 보호되나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>네, 체중 데이터 및 바디스캔 정보는 AES-256 암호화로 저장되며, 개인정보 보호법을 준수합니다. 사용자의 동의 없이 제3자에게 정보를 제공하지 않습니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 부정행위 관련 -->
+    <div class="faq-category">
+      <h3>부정행위 관련</h3>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>GLP-1 약물(위고비, 오젬픽 등) 복용 중인데 참가할 수 있나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>의사 처방에 의한 복용은 참가 신청 시 사전 신고(처방전 사본 제출)가 필요합니다. 사전 신고 없이 복용이 적발되면 부정행위로 처리됩니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>사전에 신고하면 배틀 중 GLP-1 약물을 복용해도 되나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>네, 배틀 참가 전 GLP-1 약물 복용 사실을 사전 신고하면 참가 가능합니다. 다만 사전 신고자는 일반 참가자와 별도의 GLP-1 전용 배틀에 배정되어, 동일 조건의 참가자들끼리 공정하게 경쟁합니다. 미신고 상태에서 복용이 적발되면 부정행위로 처리되므로 반드시 사전 신고를 해주세요.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>부정행위로 판정되면 어떻게 되나요?</span>
+          <div class="toggle"><svg viewBox="0 0 14 14" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </div>
+        <div class="faq-a">
+          <p>1차 적발 시 해당 배틀 퇴장 및 경고, 2차 시 3개월 참가 제한, 3차 시 영구 이용 정지됩니다. 부정행위 판정에 이의가 있는 경우 고객센터를 통해 소명할 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2>원하는 답변을 찾지 못하셨나요?</h2>
+    <p>고객센터에 문의해 주시면 빠르게 답변 드리겠습니다.</p>
+    <a href="contact.html" class="cta-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      문의하기
+    </a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+          다이어트배틀
+        </div>
+      </div>
+      <div class="footer-links"><h4>회사</h4><a href="about.html">회사 소개</a><a href="careers.html">채용</a><a href="partnership.html">파트너십</a><a href="contact.html">문의하기</a></div>
+      <div class="footer-links"><h4>고객지원</h4><a href="faq.html">자주 묻는 질문</a><a href="index.html">홈으로</a></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 다이어트배틀(주) Diet Battle Inc. All Rights Reserved.</div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.faq-item').forEach(function(item) {
+  item.querySelector('.faq-q').addEventListener('click', function() {
+    var isActive = item.classList.contains('active');
+    // Close all items in the same category
+    item.closest('.faq-category').querySelectorAll('.faq-item').forEach(function(sibling) {
+      sibling.classList.remove('active');
+    });
+    // Toggle the clicked item
+    if (!isActive) {
+      item.classList.add('active');
+    }
+  });
+});
+</script>
+
+</body>
+</html>

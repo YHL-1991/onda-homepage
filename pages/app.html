@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>다이어트배틀</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+.phone-frame { width: 390px; height: 844px; background: #fff; border-radius: 40px; overflow: hidden; position: relative; box-shadow: 0 0 40px rgba(0,0,0,0.3); }
+.screen { width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; position: absolute; top: 0; left: 0; transition: opacity 0.3s, transform 0.3s; }
+.screen.hidden { opacity: 0; pointer-events: none; transform: translateX(100%); }
+.screen.active { opacity: 1; pointer-events: all; transform: translateX(0); }
+.screen::-webkit-scrollbar { display: none; }
+
+/* Status Bar */
+.status-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 24px 8px; position: sticky; top: 0; z-index: 100; background: inherit; }
+.status-bar .time { font-size: 15px; font-weight: 600; }
+.status-bar .icons { display: flex; gap: 6px; font-size: 13px; }
+
+/* Colors */
+:root { --red: #E31E24; --dark: #222; --gray: #999; --light-gray: #F5F5F5; --border: #EAEAEA; }
+
+/* ========== SPLASH ========== */
+#splash { background: var(--red); display: flex; flex-direction: column; justify-content: center; align-items: center; }
+#splash .status-bar { background: var(--red); color: #fff; }
+#splash .logo { color: #fff; text-align: center; display: flex; flex-direction: column; align-items: center; }
+#splash .logo .logo-img { width: 80px; height: 96px; }
+
+/* ========== LOGIN ========== */
+#login { background: #fff; }
+#login .logo-area { text-align: center; padding: 40px 0 30px; display: flex; flex-direction: column; align-items: center; }
+#login .logo-area .logo-img { width: 60px; height: 72px; }
+.form-group { padding: 0 28px; margin-bottom: 20px; }
+.form-group label { font-size: 15px; font-weight: 700; display: block; margin-bottom: 12px; }
+.form-group input { width: 100%; border: none; border-bottom: 1px solid var(--border); padding: 12px 0; font-size: 15px; outline: none; }
+.form-group input::placeholder { color: #ccc; }
+.form-group .input-row { display: flex; align-items: center; border-bottom: 1px solid var(--border); }
+.form-group .input-row input { border-bottom: none; flex: 1; }
+.form-group .input-row .eye-icon { color: #bbb; font-size: 20px; cursor: pointer; }
+.btn-login { display: block; margin: 30px 28px 16px; padding: 16px; background: var(--red); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; width: calc(100% - 56px); text-align: center; }
+.login-links { display: flex; justify-content: center; gap: 0; font-size: 13px; color: var(--gray); margin-bottom: 30px; }
+.login-links span { padding: 0 12px; }
+.login-links .divider { color: #ddd; }
+.sns-section { text-align: center; }
+.sns-section .title { font-size: 13px; color: var(--gray); margin-bottom: 16px; }
+.sns-icons { display: flex; justify-content: center; gap: 16px; }
+.sns-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; cursor: pointer; }
+.sns-kakao { background: #FEE500; color: #3C1E1E; }
+.sns-naver { background: #03C75A; color: #fff; }
+
+/* ========== SIGNUP ========== */
+#signup { background: #fff; }
+.screen-header { display: flex; align-items: center; justify-content: center; padding: 16px 20px; position: relative; border-bottom: 1px solid var(--border); }
+.screen-header .back-btn { position: absolute; left: 20px; font-size: 24px; cursor: pointer; background: none; border: none; }
+.screen-header h2 { font-size: 17px; font-weight: 700; }
+.signup-form { padding: 24px 28px; }
+.signup-form .form-group { padding: 0; margin-bottom: 24px; }
+.phone-row { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
+.phone-row input { border-bottom: none; flex: 1; }
+.btn-verify { padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px; font-size: 13px; background: #fff; cursor: pointer; white-space: nowrap; color: var(--gray); }
+.btn-verify.active { border-color: var(--red); color: var(--red); }
+.btn-signup { display: block; margin: 20px 0; padding: 16px; background: var(--red); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; }
+.btn-signup.disabled { background: #ddd; color: #999; }
+
+/* ========== BOTTOM TAB ========== */
+.tab-bar { display: flex; position: sticky; bottom: 0; background: #fff; border-top: 1px solid var(--border); padding: 8px 0 24px; z-index: 200; }
+.tab-item { flex: 1; text-align: center; cursor: pointer; padding: 6px 0; }
+.tab-item .tab-icon { font-size: 22px; margin-bottom: 2px; }
+.tab-item .tab-label { font-size: 11px; font-weight: 600; color: var(--gray); }
+.tab-item.active .tab-icon, .tab-item.active .tab-label { color: var(--red); }
+
+/* ========== HOME ========== */
+#home { background: #fff; }
+.home-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; }
+.home-header .logo-sm { display: flex; align-items: center; }
+.home-header .logo-sm .logo-img { width: 28px; height: 34px; }
+.home-header .header-icons { display: flex; gap: 16px; font-size: 20px; color: #333; }
+.banner { margin: 0 20px 24px; background: linear-gradient(135deg, #8B0000, #E31E24); border-radius: 16px; padding: 24px; color: #fff; min-height: 120px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+.banner::after { content: '🏅'; position: absolute; right: 20px; top: 20px; font-size: 48px; opacity: 0.5; }
+.banner h3 { font-size: 18px; font-weight: 700; line-height: 1.5; margin-bottom: 8px; }
+.banner p { font-size: 12px; opacity: 0.85; line-height: 1.5; }
+
+.section-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 20px; margin-bottom: 4px; }
+.section-header h3 { font-size: 18px; font-weight: 800; }
+.section-header .more { font-size: 13px; color: var(--gray); cursor: pointer; }
+.section-sub { font-size: 13px; color: var(--gray); padding: 0 20px; margin-bottom: 14px; }
+
+/* Hot Battles Scroll */
+.hot-scroll { display: flex; overflow-x: auto; gap: 12px; padding: 0 20px 20px; scroll-snap-type: x mandatory; }
+.hot-scroll::-webkit-scrollbar { display: none; }
+.hot-card { min-width: 260px; border-radius: 16px; overflow: hidden; background: #f8f8f8; scroll-snap-align: start; cursor: pointer; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+.hot-card .badge { position: absolute; top: 12px; left: 12px; background: var(--red); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px; z-index: 2; }
+.hot-card .img-area { height: 140px; background: linear-gradient(135deg, #ddd, #bbb); position: relative; overflow: hidden; }
+.hot-card .img-area img { width: 100%; height: 100%; object-fit: cover; }
+.hot-card .info { padding: 14px; }
+.hot-card .info .title { font-size: 14px; font-weight: 700; line-height: 1.4; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.hot-card .timer { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray); }
+.hot-card .timer span { font-weight: 600; }
+
+/* Battle List Cards */
+.battle-card { margin: 0 20px 16px; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #f0f0f0; cursor: pointer; }
+.battle-card .card-top { position: relative; }
+.battle-card .badge { display: inline-block; background: var(--red); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px; margin: 14px 14px 8px; }
+.battle-card .timer-row { display: flex; align-items: center; gap: 6px; padding: 0 14px 8px; font-size: 12px; color: var(--gray); }
+.battle-card .date-row { padding: 0 14px 8px; font-size: 12px; color: var(--gray); }
+.battle-card .card-title { padding: 0 14px 10px; font-size: 15px; font-weight: 700; line-height: 1.4; }
+.battle-card .stats-row { display: flex; padding: 12px 14px; border-top: 1px solid #f5f5f5; gap: 0; }
+.battle-card .stat { flex: 1; text-align: center; }
+.battle-card .stat .stat-label { font-size: 11px; color: var(--gray); margin-bottom: 4px; }
+.battle-card .stat .stat-value { font-size: 14px; font-weight: 800; }
+.battle-card .stat .stat-value.red { color: var(--red); }
+
+/* ========== BATTLE DETAIL ========== */
+#battleDetail { background: #fff; }
+.detail-hero { width: 100%; height: 220px; background: linear-gradient(135deg, #ddd, #aaa); position: relative; }
+.detail-hero img { width: 100%; height: 100%; object-fit: cover; }
+.detail-hero .avatars { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); display: flex; gap: -8px; }
+.detail-hero .avatar-sm { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; background: #ccc; margin-left: -8px; overflow: hidden; }
+.detail-hero .avatar-sm:first-child { margin-left: 0; }
+.detail-hero .avatar-sm img { width: 100%; height: 100%; object-fit: cover; }
+.detail-hero .crown { position: absolute; top: -8px; left: -4px; font-size: 14px; }
+.detail-content { padding: 32px 20px 20px; }
+.detail-content h2 { font-size: 20px; font-weight: 800; line-height: 1.4; margin-bottom: 10px; }
+.detail-content .desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 20px; }
+.detail-stats { display: flex; text-align: center; padding: 16px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+.detail-stats .d-stat { flex: 1; }
+.detail-stats .d-stat .d-label { font-size: 12px; color: var(--gray); margin-bottom: 6px; }
+.detail-stats .d-stat .d-value { font-size: 18px; font-weight: 800; }
+.detail-stats .d-stat .d-value.red { color: var(--red); }
+
+.info-section { margin-bottom: 24px; }
+.info-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+.info-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 14px; }
+.info-row .info-icon { color: var(--gray); width: 20px; text-align: center; }
+.info-row .info-label { color: var(--gray); min-width: 80px; }
+.info-row .info-value { font-weight: 600; }
+.type-badge { display: inline-block; padding: 3px 12px; border-radius: 4px; font-size: 12px; font-weight: 700; }
+.type-badge.battle { background: #FFEBEE; color: var(--red); }
+.type-badge.challenge { background: #FFEBEE; color: var(--red); }
+
+.participants-section { margin-bottom: 24px; }
+.participants-scroll { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; }
+.participant { text-align: center; }
+.participant .p-avatar { width: 56px; height: 56px; border-radius: 50%; background: #ddd; margin-bottom: 6px; overflow: hidden; }
+.participant .p-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.participant .p-name { font-size: 11px; color: #666; }
+
+.refund-box { background: var(--light-gray); border-radius: 12px; padding: 20px; margin-bottom: 100px; }
+.refund-box h4 { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.refund-box ul { padding-left: 16px; }
+.refund-box li { font-size: 12px; color: #666; line-height: 1.8; }
+
+.btn-join { position: sticky; bottom: 24px; display: block; margin: 0 20px; padding: 16px; background: var(--red); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; width: calc(100% - 40px); text-align: center; }
+
+/* ========== VERIFICATION ========== */
+#verification { background: #fff; }
+.verify-section { padding: 20px; }
+.verify-section h3 { font-size: 16px; font-weight: 800; margin-bottom: 16px; }
+.empty-state { text-align: center; padding: 40px 20px; }
+.empty-state .logo-img { width: 48px; height: 58px; margin: 0 auto 12px; }
+.empty-state h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+.empty-state p { font-size: 13px; color: var(--gray); line-height: 1.6; }
+.empty-btns { display: flex; justify-content: center; gap: 12px; margin-top: 20px; }
+.btn-outline-red { padding: 10px 24px; border: 1.5px solid var(--red); color: var(--red); background: #fff; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.btn-filled-red { padding: 10px 24px; background: var(--red); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+.active-battle-card { background: #fff; border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #f0f0f0; }
+.abc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.abc-header img { width: 56px; height: 56px; border-radius: 12px; object-fit: cover; }
+.abc-header .abc-info .abc-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.abc-header .abc-info .abc-date { font-size: 12px; color: var(--gray); display: flex; align-items: center; gap: 4px; }
+.weekly-progress { margin-bottom: 16px; }
+.weekly-progress h4 { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.week-dots { display: flex; gap: 24px; }
+.week-dot { text-align: center; }
+.week-dot .dot-label { font-size: 12px; color: var(--gray); margin-bottom: 6px; }
+.week-dot .dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.week-dot .dot.checked { background: var(--red); color: #fff; }
+.week-dot .dot.unchecked { background: #eee; color: #ccc; }
+.btn-verify-full { display: block; width: 100%; padding: 14px; background: var(--red); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-bottom: 8px; }
+.btn-verify-full.disabled { background: #ddd; color: #999; cursor: default; }
+.verify-note { font-size: 12px; color: var(--gray); text-align: center; margin-bottom: 16px; }
+.battle-status { border-top: 1px solid var(--border); padding-top: 16px; }
+
+/* ========== VERIFY SUBMIT ========== */
+#verifySubmit { background: #fff; }
+.vs-body { padding: 20px 20px 100px; }
+.vs-photo-section { margin-bottom: 28px; }
+.vs-photo-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.vs-desc { font-size: 13px; color: var(--gray); margin-bottom: 12px; line-height: 1.5; }
+.vs-photo-area { width: 100%; aspect-ratio: 4/3; border-radius: 16px; overflow: hidden; background: var(--light-gray); border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.vs-photo-area.has-photo { border: none; }
+.vs-photo-area img { width: 100%; height: 100%; object-fit: cover; }
+.vs-placeholder { text-align: center; color: var(--gray); }
+.vs-placeholder p { margin-top: 8px; font-size: 14px; font-weight: 600; }
+.vs-weight-section { margin-bottom: 28px; }
+.vs-weight-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+.vs-weight-row { display: flex; align-items: center; gap: 8px; border-bottom: 2px solid var(--dark); padding-bottom: 8px; }
+.vs-weight-row input { flex: 1; border: none; font-size: 28px; font-weight: 800; outline: none; background: none; }
+.vs-weight-row input::placeholder { color: #ddd; }
+.vs-unit { font-size: 20px; font-weight: 700; color: var(--gray); }
+.vs-date-section { margin-bottom: 28px; }
+.vs-date-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+.vs-date { font-size: 15px; color: var(--dark); padding: 12px 16px; background: var(--light-gray); border-radius: 10px; }
+.vs-memo-section { margin-bottom: 32px; }
+.vs-memo-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+.vs-memo { width: 100%; min-height: 80px; border: 1.5px solid var(--border); border-radius: 12px; padding: 14px; font-size: 14px; resize: none; font-family: inherit; outline: none; line-height: 1.6; }
+.vs-memo:focus { border-color: var(--red); }
+.vs-submit { display: block; width: 100%; padding: 16px; background: var(--red); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; }
+.vs-submit:active { opacity: 0.85; }
+.vs-success-modal { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+.vs-modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); }
+.vs-modal-content { position: relative; background: #fff; border-radius: 24px; padding: 40px 28px 28px; text-align: center; width: 300px; z-index: 1; }
+.vs-check-circle { width: 64px; height: 64px; border-radius: 50%; background: #4CAF50; color: #fff; font-size: 32px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-weight: 700; }
+.vs-modal-content h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+.vs-modal-content p { font-size: 14px; color: var(--gray); line-height: 1.6; margin-bottom: 20px; }
+.vs-result-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: var(--light-gray); border-radius: 10px; margin-bottom: 20px; font-size: 15px; }
+.vs-result-weight { font-weight: 800; color: var(--red); font-size: 18px; }
+.vs-modal-btn { display: block; width: 100%; padding: 14px; background: var(--red); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+
+/* ========== LIVE CAMERA CAPTURE ========== */
+.cam-overlay { position:fixed; inset:0; background:#000; z-index:10000; display:none; flex-direction:column; }
+.cam-header { display:flex; align-items:center; justify-content:space-between; padding:50px 20px 12px; background:#111; color:#fff; }
+.cam-header h3 { font-size:16px; font-weight:700; }
+.cam-close { background:none; border:none; color:#fff; font-size:28px; cursor:pointer; padding:0 4px; }
+.cam-video-wrap { flex:1; position:relative; overflow:hidden; background:#000; }
+.cam-video { width:100%; height:100%; object-fit:cover; }
+.cam-info { position:absolute; bottom:0; left:0; right:0; padding:14px 16px; background:linear-gradient(transparent, rgba(0,0,0,0.75)); }
+.cam-timestamp { color:#fff; font-size:14px; font-weight:700; text-shadow:0 1px 4px rgba(0,0,0,0.9); font-family:'Courier New',monospace; }
+.cam-code-box { position:absolute; top:16px; right:16px; background:rgba(227,30,36,0.9); color:#fff; padding:8px 14px; border-radius:10px; font-size:16px; font-weight:800; letter-spacing:3px; }
+.cam-guide { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); border:2px dashed rgba(255,255,255,0.35); width:75%; height:45%; border-radius:16px; pointer-events:none; display:flex; align-items:center; justify-content:center; }
+.cam-guide-text { color:rgba(255,255,255,0.45); font-size:12px; text-align:center; line-height:1.5; }
+.cam-controls { padding:20px 0 44px; background:#111; display:flex; align-items:center; justify-content:center; }
+.cam-capture-btn { width:72px; height:72px; border-radius:50%; border:4px solid #fff; background:transparent; cursor:pointer; position:relative; }
+.cam-capture-btn::after { content:''; position:absolute; inset:4px; border-radius:50%; background:#fff; transition:background 0.1s; }
+.cam-capture-btn:active::after { background:#ccc; }
+.cam-warning { text-align:center; padding:8px; background:#111; color:rgba(255,200,0,0.8); font-size:11px; font-weight:600; }
+
+/* ========== GLP-1 DECLARATION MODAL ========== */
+.glp1-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9998; display:none; align-items:center; justify-content:center; }
+.glp1-content { background:#fff; border-radius:24px; padding:28px 22px 22px; width:340px; max-height:80vh; overflow-y:auto; position:relative; }
+.glp1-content h3 { font-size:18px; font-weight:800; text-align:center; margin-bottom:4px; }
+.glp1-sub { font-size:13px; color:#888; text-align:center; margin-bottom:18px; line-height:1.6; }
+.glp1-section { margin-bottom:16px; }
+.glp1-section h4 { font-size:14px; font-weight:700; margin-bottom:10px; }
+.glp1-option { display:flex; align-items:flex-start; gap:10px; padding:12px 14px; border:1.5px solid #e0e0e0; border-radius:12px; margin-bottom:8px; cursor:pointer; transition:border-color 0.2s, background 0.2s; }
+.glp1-option.selected { border-color:var(--red); background:rgba(227,30,36,0.04); }
+.glp1-radio { width:20px; height:20px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; transition:border-color 0.2s; }
+.glp1-option.selected .glp1-radio { border-color:var(--red); }
+.glp1-option.selected .glp1-radio::after { content:''; width:10px; height:10px; border-radius:50%; background:var(--red); }
+.glp1-opt-text { font-size:14px; line-height:1.5; }
+.glp1-opt-text strong { display:block; font-weight:700; margin-bottom:2px; }
+.glp1-opt-text span { font-size:12px; color:#888; }
+.glp1-pledge { background:#f8f8f8; border-radius:12px; padding:14px 16px; margin-bottom:16px; }
+.glp1-pledge p { font-size:12px; color:#555; line-height:1.8; margin:0; }
+.glp1-check-row { display:flex; align-items:center; gap:8px; margin-top:12px; cursor:pointer; }
+.glp1-checkbox { width:22px; height:22px; border:2px solid #ccc; border-radius:5px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px; color:#fff; transition:all 0.2s; }
+.glp1-check-row.checked .glp1-checkbox { background:var(--red); border-color:var(--red); }
+.glp1-check-label { font-size:13px; font-weight:600; }
+.glp1-btns { display:flex; gap:10px; margin-top:4px; }
+.glp1-btn-cancel { flex:1; padding:14px; border:1.5px solid #ddd; border-radius:12px; background:#fff; font-size:15px; font-weight:600; cursor:pointer; text-align:center; }
+.glp1-btn-confirm { flex:2; padding:14px; border:none; border-radius:12px; background:var(--red); color:#fff; font-size:15px; font-weight:700; cursor:pointer; opacity:0.35; pointer-events:none; text-align:center; transition:opacity 0.2s; }
+.glp1-btn-confirm.active { opacity:1; pointer-events:auto; }
+
+/* ========== GLP-1 REPORT ========== */
+.report-section { margin-top:16px; padding-top:16px; border-top:1px solid var(--border); }
+.report-section h4 { font-size:14px; font-weight:700; margin-bottom:8px; }
+.report-btn { display:flex; align-items:center; justify-content:center; gap:6px; padding:12px 16px; border:1.5px solid #e0e0e0; border-radius:10px; background:#fff; font-size:13px; color:#888; cursor:pointer; width:100%; }
+.report-btn:active { background:#f5f5f5; }
+.report-modal { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9998; display:none; align-items:center; justify-content:center; }
+.report-content { background:#fff; border-radius:20px; padding:24px; width:320px; }
+.report-content h3 { font-size:17px; font-weight:800; text-align:center; margin-bottom:16px; }
+.report-option { padding:14px; border:1.5px solid #e0e0e0; border-radius:10px; margin-bottom:8px; font-size:14px; cursor:pointer; text-align:center; transition:all 0.2s; }
+.report-option:active, .report-option.selected { border-color:var(--red); background:rgba(227,30,36,0.05); font-weight:600; }
+.report-textarea { width:100%; min-height:60px; border:1.5px solid #e0e0e0; border-radius:10px; padding:12px; font-size:13px; resize:none; font-family:inherit; margin:8px 0 14px; outline:none; }
+.report-textarea:focus { border-color:var(--red); }
+.report-submit { width:100%; padding:14px; background:var(--red); color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:700; cursor:pointer; }
+
+/* ========== FAB BUTTON ========== */
+.fab-wrap { position:sticky; bottom:80px; height:0; z-index:100; pointer-events:none; }
+.fab-create { position:absolute; bottom:0; right:20px; width:56px; height:56px; border-radius:50%; background:var(--red); color:#fff; border:none; font-size:32px; font-weight:300; cursor:pointer; box-shadow:0 4px 16px rgba(227,30,36,0.4); display:flex; align-items:center; justify-content:center; transition:transform 0.2s; line-height:1; pointer-events:auto; }
+.fab-create:active { transform:scale(0.9); }
+
+.battle-status h4 { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.bs-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 14px; }
+.bs-row .bs-icon { color: var(--gray); width: 20px; }
+.bs-row .bs-label { min-width: 70px; color: var(--gray); }
+.bs-row .bs-value { font-weight: 600; flex: 1; }
+.bs-row .bs-date { font-size: 12px; color: #bbb; }
+
+/* ========== SEARCH ========== */
+#search { background: #fff; }
+.search-title { font-size: 22px; font-weight: 800; line-height: 1.4; padding: 20px 20px 16px; }
+.search-bar { display: flex; align-items: center; margin: 0 20px 28px; border-bottom: 2px solid #222; padding-bottom: 10px; }
+.search-bar input { flex: 1; border: none; outline: none; font-size: 15px; }
+.search-bar input::placeholder { color: #ccc; }
+.search-bar .search-icon { font-size: 22px; color: #333; cursor: pointer; }
+.keyword-section { padding: 0 20px; margin-bottom: 28px; }
+.keyword-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+.keyword-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.keyword-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 14px; padding: 16px; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+.keyword-card .kw-icon { font-size: 18px; margin-bottom: 8px; }
+.keyword-card .kw-label { font-size: 15px; font-weight: 600; }
+.creators-section { padding: 0 20px; }
+.creators-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+.creators-scroll { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 16px; }
+.creator { text-align: center; position: relative; }
+.creator .cr-avatar { width: 72px; height: 72px; border-radius: 50%; border: 3px solid #E91E63; background: #ddd; overflow: hidden; }
+.creator .cr-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.creator .cr-badge { position: absolute; top: 0; left: 0; font-size: 16px; background: var(--red); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; }
+.creator .cr-badge span { font-size: 10px; }
+.creator .cr-name { font-size: 12px; margin-top: 6px; color: #444; }
+
+/* ========== MY PAGE ========== */
+#mypage { background: var(--light-gray); }
+.my-profile { display: flex; align-items: center; gap: 14px; padding: 20px; background: #fff; }
+.my-profile .my-avatar { width: 60px; height: 60px; border-radius: 50%; background: #ddd; overflow: hidden; }
+.my-profile .my-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.my-profile .my-name { font-size: 18px; font-weight: 800; flex: 1; }
+.btn-edit-profile { padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px; font-size: 12px; background: #fff; cursor: pointer; }
+.prize-card { margin: 12px 20px; background: linear-gradient(135deg, #E31E24, #FF5252); border-radius: 16px; padding: 20px; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+.prize-card .prize-label { font-size: 13px; opacity: 0.9; margin-bottom: 4px; }
+.prize-card .prize-amount { font-size: 22px; font-weight: 800; }
+.btn-prize-history { padding: 6px 14px; border: 1px solid rgba(255,255,255,0.6); border-radius: 20px; font-size: 12px; color: #fff; background: transparent; cursor: pointer; }
+.stats-card { display: flex; margin: 0 20px 12px; background: #fff; border-radius: 14px; overflow: hidden; }
+.stats-card .sc-item { flex: 1; text-align: center; padding: 16px; }
+.stats-card .sc-item:first-child { border-right: 1px solid var(--border); }
+.stats-card .sc-icon { font-size: 24px; margin-bottom: 4px; }
+.stats-card .sc-label { font-size: 14px; font-weight: 600; }
+.my-section { margin: 12px 20px; background: #fff; border-radius: 14px; overflow: hidden; }
+.my-section-header { display: flex; justify-content: space-between; align-items: center; padding: 16px; font-size: 15px; font-weight: 700; cursor: pointer; }
+.my-section-header .count { color: var(--red); margin-left: 6px; }
+.my-section-header .arrow { color: var(--gray); }
+.my-battle-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid #f5f5f5; }
+.my-battle-item img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; }
+.my-battle-item .mbi-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.my-battle-item .mbi-date { font-size: 12px; color: var(--gray); }
+.my-list-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-top: 1px solid #f5f5f5; font-size: 14px; cursor: pointer; }
+.my-list-item .arrow { color: var(--gray); }
+.my-label-header { padding: 14px 16px 6px; font-size: 12px; color: var(--gray); }
+.app-info { display: flex; justify-content: space-between; align-items: center; padding: 16px; font-size: 14px; }
+.app-info .badge-new { background: #FFEBEE; color: var(--red); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+
+/* ========== CREATE BATTLE ========== */
+#createBattle { background: #fff; }
+.create-form { padding: 20px; }
+.img-upload { width: 100%; height: 180px; background: var(--light-gray); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; cursor: pointer; border: 2px dashed #ddd; }
+.img-upload .plus { font-size: 36px; color: #ccc; }
+.create-form .form-group { padding: 0; margin-bottom: 24px; }
+.create-form .form-group label { font-size: 15px; font-weight: 700; margin-bottom: 10px; display: block; }
+.create-form textarea { width: 100%; border: none; border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 14px; outline: none; resize: none; min-height: 80px; font-family: inherit; }
+.date-row { display: flex; align-items: center; gap: 10px; }
+.date-input { flex: 1; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--border); padding: 10px 0; }
+.date-input input { flex: 1; border: none; outline: none; font-size: 14px; }
+.date-separator { color: var(--gray); font-weight: 600; }
+.gender-btns { display: flex; gap: 10px; }
+.gender-btn { padding: 10px 24px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; cursor: pointer; background: #fff; font-weight: 600; }
+.gender-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+.weight-row { display: flex; align-items: center; gap: 10px; }
+.weight-row input { flex: 1; border: none; border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 14px; outline: none; text-align: center; }
+.create-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
+.btn-create { display: block; width: 100%; padding: 16px; background: #ddd; color: #999; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+.btn-create.active { background: var(--red); color: #fff; }
+
+/* ========== MODAL ========== */
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; display: flex; align-items: flex-end; justify-content: center; }
+.modal-overlay.hidden { display: none; }
+.modal-content { background: #fff; border-radius: 20px 20px 0 0; padding: 28px 24px 40px; width: 390px; }
+.modal-content h3 { font-size: 18px; font-weight: 800; margin-bottom: 20px; }
+.modal-options { display: flex; gap: 14px; }
+.modal-option { flex: 1; border: 2px solid var(--border); border-radius: 16px; padding: 24px 16px; text-align: center; cursor: pointer; transition: border-color 0.2s; }
+.modal-option:hover, .modal-option.selected { border-color: var(--red); }
+.modal-option .mo-icon { font-size: 28px; margin-bottom: 8px; }
+.modal-option .mo-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.modal-option .mo-title.red { color: var(--red); }
+.modal-option .mo-desc { font-size: 12px; color: var(--gray); line-height: 1.5; }
+
+/* Home indicator */
+.home-indicator { width: 134px; height: 5px; background: #000; border-radius: 3px; margin: 8px auto 0; }
+
+/* ========== BEFORE & AFTER ========== */
+.ba-section { margin: 0 20px 24px; background: linear-gradient(135deg, #fff5f5, #fff0e8); border-radius: 16px; padding: 20px; cursor: pointer; border: 1px solid #ffe0d6; }
+.ba-section:active { transform: scale(0.98); }
+.ba-section .ba-sec-title { font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 6px; }
+.ba-section .ba-sec-desc { font-size: 13px; color: #666; line-height: 1.5; }
+.ba-section .ba-sec-arrow { float: right; font-size: 20px; color: var(--red); margin-top: -28px; }
+
+.ba-container { padding: 0 20px 100px; }
+.ba-kg-selector { display: flex; gap: 6px; padding: 16px 0 8px; flex-wrap: wrap; justify-content: center; }
+.ba-kg-btn { padding: 8px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: #fff; font-size: 13px; font-weight: 700; color: var(--gray); cursor: pointer; transition: all 0.2s; }
+.ba-kg-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+.ba-kg-btn:active { transform: scale(0.95); }
+.ba-labels { display: flex; justify-content: space-around; padding: 14px 0 10px; }
+.ba-label { font-size: 20px; font-weight: 800; color: var(--dark); }
+.ba-photos { display: flex; gap: 10px; margin-bottom: 20px; }
+.ba-photo { flex: 1; aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; background: #f0f0f0; position: relative; display: flex; align-items: center; justify-content: center; }
+.ba-photo img, .ba-photo canvas { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 16px; }
+.ba-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--gray); font-size: 14px; text-align: center; gap: 12px; padding: 20px; }
+.ba-capture-btn { padding: 12px 28px; background: var(--red); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+.ba-capture-btn:active { opacity: 0.8; }
+.ba-text { padding: 8px 0 16px; }
+.ba-text p { font-size: 14px; color: #555; line-height: 1.8; margin-bottom: 8px; word-break: keep-all; }
+.ba-cta { display: block; width: 100%; padding: 16px; background: var(--red); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; text-align: center; }
+.ba-cta:active { opacity: 0.85; }
+.ba-retake { display: block; width: 100%; padding: 14px; background: #fff; color: var(--red); border: 1.5px solid var(--red); border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; margin-top: 10px; }
+.ba-processing { position: absolute; inset: 0; background: rgba(255,255,255,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; font-size: 13px; color: var(--red); font-weight: 600; border-radius: 16px; z-index: 5; }
+.ba-spinner { width: 32px; height: 32px; border: 3px solid #eee; border-top-color: var(--red); border-radius: 50%; animation: baspin 0.8s linear infinite; }
+@keyframes baspin { to { transform: rotate(360deg); } }
+
+/* ========== POLICY PAGES ========== */
+.policy-list { padding: 0; }
+.policy-list-item { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid #f5f5f5; font-size: 15px; font-weight: 500; cursor: pointer; }
+.policy-list-item:active { background: #f9f9f9; }
+.policy-list-item .arrow { color: var(--gray); font-size: 18px; }
+.policy-body { padding: 20px; }
+.policy-body h3 { font-size: 17px; font-weight: 800; color: #222; margin: 28px 0 12px; }
+.policy-body h3:first-child { margin-top: 0; }
+.policy-body p { font-size: 13px; color: #555; line-height: 1.8; margin-bottom: 12px; word-break: keep-all; }
+.policy-body ul { padding-left: 18px; margin-bottom: 16px; }
+.policy-body li { font-size: 13px; color: #555; line-height: 2; }
+.policy-body .policy-date { font-size: 12px; color: var(--gray); margin-bottom: 20px; }
+.policy-body table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 12px; }
+.policy-body table th { background: #f5f5f5; padding: 10px 8px; text-align: left; font-weight: 700; border: 1px solid #eee; }
+.policy-body table td { padding: 10px 8px; border: 1px solid #eee; color: #555; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="phone-frame" id="app">
+
+<!-- ========== SPLASH ========== -->
+<div class="screen active" id="splash">
+  <div class="status-bar"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center">
+    <div class="logo">
+      <img class="logo-img" src="data:image/svg+xml,%3Csvg viewBox='0 0 100 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15,5 C55,22 55,98 15,115 C32,98 32,22 15,5Z' fill='white'/%3E%3Cpath d='M85,5 C45,22 45,98 85,115 C68,98 68,22 85,5Z' fill='white'/%3E%3C/svg%3E" alt="다이어트배틀">
+    </div>
+  </div>
+</div>
+
+<!-- ========== LOGIN ========== -->
+<div class="screen hidden" id="login">
+  <div class="status-bar"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="logo-area">
+    <img class="logo-img" src="data:image/svg+xml,%3Csvg viewBox='0 0 100 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15,5 C55,22 55,98 15,115 C32,98 32,22 15,5Z' fill='%23E31E24'/%3E%3Cpath d='M85,5 C45,22 45,98 85,115 C68,98 68,22 85,5Z' fill='%23E31E24'/%3E%3C/svg%3E" alt="다이어트배틀">
+  </div>
+  <div class="form-group">
+    <label>이메일</label>
+    <input type="email" placeholder="abcd1234@gmail.com" id="loginEmail">
+  </div>
+  <div class="form-group">
+    <label>비밀번호</label>
+    <div class="input-row">
+      <input type="password" id="loginPw">
+      <span class="eye-icon">👁‍🗨</span>
+    </div>
+  </div>
+  <button class="btn-login" onclick="navigateTo('home')">로그인</button>
+  <div class="login-links">
+    <span>이메일 찾기</span><span class="divider">|</span>
+    <span>비밀번호 찾기</span><span class="divider">|</span>
+    <span style="cursor:pointer" onclick="navigateTo('signup')">회원가입</span>
+  </div>
+  <div class="sns-section">
+    <div class="title">SNS 계정 로그인</div>
+    <div class="sns-icons">
+      <div class="sns-icon sns-kakao">💬</div>
+      <div class="sns-icon sns-naver" style="font-size:18px;font-weight:800">N</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SIGNUP ========== -->
+<div class="screen hidden" id="signup">
+  <div class="status-bar"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header">
+    <button class="back-btn" onclick="navigateTo('login')">‹</button>
+    <h2>회원가입</h2>
+  </div>
+  <div class="signup-form">
+    <div class="form-group">
+      <label>이메일</label>
+      <input type="email" placeholder="abcd1234@gmail.com">
+    </div>
+    <div class="form-group">
+      <label>비밀번호</label>
+      <div class="input-row"><input type="password" placeholder="비밀번호"><span class="eye-icon">👁‍🗨</span></div>
+    </div>
+    <div class="form-group" style="margin-top:-8px">
+      <div class="input-row"><input type="password" placeholder="비밀번호 확인"><span class="eye-icon">👁‍🗨</span></div>
+    </div>
+    <div class="form-group">
+      <label>이름</label>
+      <input type="text" placeholder="이름을 입력해 주세요.">
+    </div>
+    <div class="form-group">
+      <label>휴대폰 번호</label>
+      <div class="phone-row"><input type="tel" placeholder="휴대폰 번호"><button class="btn-verify">인증</button></div>
+    </div>
+    <div class="form-group" style="margin-top:-8px">
+      <div class="phone-row"><input type="text" placeholder="인증번호 입력"><button class="btn-verify">확인</button></div>
+    </div>
+    <button class="btn-signup" onclick="navigateTo('login')">회원가입</button>
+  </div>
+</div>
+
+<!-- ========== HOME ========== -->
+<div class="screen hidden" id="home">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="home-header">
+    <span class="logo-sm"><img class="logo-img" src="data:image/svg+xml,%3Csvg viewBox='0 0 100 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15,5 C55,22 55,98 15,115 C32,98 32,22 15,5Z' fill='%23E31E24'/%3E%3Cpath d='M85,5 C45,22 45,98 85,115 C68,98 68,22 85,5Z' fill='%23E31E24'/%3E%3C/svg%3E" alt=""></span>
+    <div class="header-icons"><span>🔔</span><span>☰</span></div>
+  </div>
+  <div class="banner">
+    <h3>더 강력하게,<br>더 꾸준하게</h3>
+    <p>배틀과 챌린지로 목표 달성을<br>함께 만들어가세요.</p>
+  </div>
+
+  <div class="ba-section" onclick="navigateTo('beforeAfter')">
+    <div class="ba-sec-title">✨ Before & After 시뮬레이션</div>
+    <div class="ba-sec-desc">사진 한 장으로 30kg 감량 후 나의 모습을 확인해보세요!</div>
+    <div class="ba-sec-arrow">›</div>
+  </div>
+
+  <div class="section-header"><h3>지금 HOT한 배틀</h3></div>
+  <div class="section-sub">인기 있는 배틀에 도전해 보세요!</div>
+  <div class="hot-scroll">
+    <div class="hot-card" onclick="navigateTo('battleDetail')">
+      <div class="img-area"><div class="badge">50명 배틀중</div><img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=200&fit=crop" onerror="this.style.display='none'"></div>
+      <div class="info"><div class="title">50kg 먼저 달성하는 사람이 상금을 모두 가져간다!</div><div class="timer">⏰ 남은 시간 <span>24:16:35</span></div></div>
+    </div>
+    <div class="hot-card" onclick="navigateTo('battleDetail')">
+      <div class="img-area" style="background:linear-gradient(135deg,#f5a623,#e8900c)"><div class="badge">12명 배틀중</div></div>
+      <div class="info"><div class="title">뛰어! 달려! 체중 감량 고고!</div><div class="timer">⏰ 남은 시간 <span>24:16:35</span></div></div>
+    </div>
+  </div>
+
+  <div class="section-header" style="margin-top:8px"><h3>진행 중인 배틀</h3><span class="more">더보기</span></div>
+  <div class="section-sub">다양한 배틀을 만나 보세요!</div>
+
+  <div class="battle-card" onclick="navigateTo('battleDetail')">
+    <div class="badge">25명 배틀중</div>
+    <div class="timer-row">⏰ 남은 시간 <span style="font-weight:600">24:16:35</span></div>
+    <div class="date-row">📅 25.11.10 - 25.12.07</div>
+    <div class="card-title">체지방 줄이기 대작전!</div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-label">참가비</div><div class="stat-value red">100,000원</div></div>
+      <div class="stat"><div class="stat-label">참가인원</div><div class="stat-value">25 명</div></div>
+      <div class="stat"><div class="stat-label">총 상금</div><div class="stat-value">2,500,000원</div></div>
+    </div>
+  </div>
+
+  <div class="battle-card" onclick="navigateTo('battleDetail')">
+    <div class="badge">75명 배틀중</div>
+    <div class="timer-row">⏰ 남은 시간 <span style="font-weight:600">24:16:35</span></div>
+    <div class="date-row">📅 25.10.30 - 25.11.26</div>
+    <div class="card-title">너랑 나랑 우리랑! 모두 다 같이 체지방 줄이고 체중 감량 해요!</div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-label">참가비</div><div class="stat-value red">3,000원</div></div>
+      <div class="stat"><div class="stat-label">참가인원</div><div class="stat-value">75 명</div></div>
+      <div class="stat"><div class="stat-label">총 상금</div><div class="stat-value">225,000원</div></div>
+    </div>
+  </div>
+
+  <div class="battle-card" onclick="navigateTo('battleDetail')">
+    <div class="badge">40명 배틀중</div>
+    <div class="timer-row">⏰ 남은 시간 <span style="font-weight:600">24:16:35</span></div>
+    <div class="date-row">📅 25.11.14 - 25.12.11</div>
+    <div class="card-title">목표도 이루고 상금도 가져가자!</div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-label">참가비</div><div class="stat-value red">500원</div></div>
+      <div class="stat"><div class="stat-label">참가인원</div><div class="stat-value">40 명</div></div>
+      <div class="stat"><div class="stat-label">총 상금</div><div class="stat-value">20,000원</div></div>
+    </div>
+  </div>
+
+  <div class="section-header" style="margin-top:12px"><h3>오픈 예정 배틀</h3><span class="more">더보기</span></div>
+  <div class="section-sub">곧 오픈될 배틀을 둘러보세요!</div>
+
+  <div class="battle-card" onclick="navigateTo('battleDetail')">
+    <div class="date-row" style="padding-top:14px">📅 25.10.29 - 25.11.25</div>
+    <div class="card-title">누가 먼저 목표 달성하고 상금을 가져갈까요?</div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-label">참가비</div><div class="stat-value red">15,000원</div></div>
+      <div class="stat"><div class="stat-label">참가인원</div><div class="stat-value">50 명</div></div>
+      <div class="stat"><div class="stat-label">총 상금</div><div class="stat-value">750,000원</div></div>
+    </div>
+  </div>
+
+  <div class="battle-card" onclick="navigateTo('battleDetail')">
+    <div class="date-row" style="padding-top:14px">📅 25.11.12 - 25.12.09</div>
+    <div class="card-title">이번에는 꼭 바프 성공하고 상금까지 가져갈거다!</div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-label">참가비</div><div class="stat-value red">3,000원</div></div>
+      <div class="stat"><div class="stat-label">참가인원</div><div class="stat-value">10 명</div></div>
+      <div class="stat"><div class="stat-label">총 상금</div><div class="stat-value">30,000원</div></div>
+    </div>
+  </div>
+
+  <div class="battle-card" onclick="navigateTo('battleDetail')" style="margin-bottom:80px">
+    <div class="date-row" style="padding-top:14px">📅 25.12.16 - 26.01.12</div>
+    <div class="card-title">상금은 나의 것!</div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-label">참가비</div><div class="stat-value red">100,000원</div></div>
+      <div class="stat"><div class="stat-label">참가인원</div><div class="stat-value">5 명</div></div>
+      <div class="stat"><div class="stat-label">총 상금</div><div class="stat-value">500,000원</div></div>
+    </div>
+  </div>
+
+  <!-- FAB: 배틀/챌린지 개설 버튼 -->
+  <div class="fab-wrap"><button class="fab-create" onclick="showCreateModal()">＋</button></div>
+
+  <div class="tab-bar" id="homeTab">
+    <div class="tab-item" onclick="switchTab('coupon')"><div class="tab-icon">🎟</div><div class="tab-label">쿠폰</div></div>
+    <div class="tab-item" onclick="switchTab('search')"><div class="tab-icon">🔍</div><div class="tab-label">검색</div></div>
+    <div class="tab-item active" onclick="switchTab('home')"><div class="tab-icon">🏠</div><div class="tab-label">홈</div></div>
+    <div class="tab-item" onclick="switchTab('verification')"><div class="tab-icon">✅</div><div class="tab-label">인증</div></div>
+    <div class="tab-item" onclick="switchTab('mypage')"><div class="tab-icon">👤</div><div class="tab-label">마이</div></div>
+  </div>
+</div>
+
+<!-- ========== BATTLE DETAIL ========== -->
+<div class="screen hidden" id="battleDetail">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header">
+    <button class="back-btn" onclick="navigateTo('home')">‹</button>
+    <h2>배틀 상세</h2>
+  </div>
+  <div class="detail-hero">
+    <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=250&fit=crop" onerror="this.parentElement.style.background='linear-gradient(135deg,#ddd,#aaa)'">
+    <div class="avatars">
+      <div class="avatar-sm" style="position:relative"><span class="crown">👑</span><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop" onerror=""></div>
+      <div class="avatar-sm"><img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop" onerror=""></div>
+      <div class="avatar-sm"><img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=60&h=60&fit=crop" onerror=""></div>
+    </div>
+  </div>
+  <div class="detail-content">
+    <h2>너랑 나랑 우리랑! 모두 다 같이 체지방 줄이고 체중 감량 해요!</h2>
+    <div class="desc">혹독한 다이어트로 목표를 이루고자 배틀 생성했습니다! 같은 목표를 가진 분들과 함께 경쟁하여 최종 우승 상금 가져가세요!</div>
+    <div class="detail-stats">
+      <div class="d-stat"><div class="d-label">참가비</div><div class="d-value red">100,000원</div></div>
+      <div class="d-stat"><div class="d-label">참가인원</div><div class="d-value">25명</div></div>
+      <div class="d-stat"><div class="d-label">총 상금</div><div class="d-value red">2,500,000원</div></div>
+    </div>
+
+    <div class="info-section">
+      <h3>배틀 정보</h3>
+      <div class="info-row"><span class="info-icon">📅</span><span class="info-label">배틀 기간</span><span class="info-value">25.11.10 - 25.12.08</span></div>
+      <div class="info-row"><span class="info-icon">🔥</span><span class="info-label">배틀 방식</span><span class="type-badge battle">배틀</span></div>
+      <div class="info-row"><span class="info-icon">💰</span><span class="info-label">참가비</span><span class="info-value">100,000원</span></div>
+      <div class="info-row"><span class="info-icon">⚖</span><span class="info-label">참가 체중</span><span class="info-value">65kg ~ 75kg</span></div>
+      <div class="info-row"><span class="info-icon">👤</span><span class="info-label">참가 성별</span><span class="info-value">무관</span></div>
+    </div>
+
+    <div class="participants-section">
+      <h3>배틀 참가자</h3>
+      <div class="participants-scroll">
+        <div class="participant"><div class="p-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop" onerror=""></div><div class="p-name">러너홀릭</div></div>
+        <div class="participant"><div class="p-avatar"><img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop" onerror=""></div><div class="p-name">오늘도달려</div></div>
+        <div class="participant"><div class="p-avatar"><img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=60&h=60&fit=crop" onerror=""></div><div class="p-name">날개달린...</div></div>
+        <div class="participant"><div class="p-avatar"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop" onerror=""></div><div class="p-name">즐거운하루</div></div>
+        <div class="participant"><div class="p-avatar"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=60&h=60&fit=crop" onerror=""></div><div class="p-name">콧노래</div></div>
+      </div>
+    </div>
+
+    <div class="refund-box">
+      <h4>환불 안내</h4>
+      <ul>
+        <li>결제 후 챌린지 시작 전까지는 전액 환불이 가능합니다.</li>
+        <li>챌린지가 시작된 이후에는 참여 여부와 관계없이 환불이 불가합니다.</li>
+        <li>시스템 오류, 중복 결제 등 특수한 경우에는 확인 후 환불이 진행됩니다.</li>
+        <li>환불 요청은 고객센터를 통해 신청해 주시면 순차적으로 처리됩니다.</li>
+        <li>환불 처리는 접수 후 영업일 기준 3-7일 이내 완료됩니다.</li>
+        <li>이벤트성 결제, 할인 결제, 쿠폰 사용 결제의 경우 일부 환불이 제한될 수 있습니다.</li>
+        <li>결제 수단(카드사, 계좌 이체 등)에 따라 환불 반영 시점은 다를 수 있습니다.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="report-section" style="padding:0 20px 16px">
+    <h4>공정한 배틀을 위해</h4>
+    <button class="report-btn" onclick="openReportModal()">🚨 GLP-1 약물 복용 의심 신고하기</button>
+  </div>
+  <button class="btn-join" onclick="openGlp1Declaration()">참가하기</button>
+</div>
+
+<!-- ========== VERIFICATION ========== -->
+<div class="screen hidden" id="verification">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header"><h2>인증</h2></div>
+
+  <div class="verify-section">
+    <h3>참가 중인 배틀</h3>
+    <div class="active-battle-card">
+      <div class="abc-header">
+        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=80&h=80&fit=crop" onerror="this.style.background='#ddd'">
+        <div class="abc-info">
+          <div class="abc-title">너랑 나랑 우리랑! 모두 다 같이 체지...</div>
+          <div class="abc-date">📅 25.10.30 - 25.11.26</div>
+        </div>
+      </div>
+      <div class="weekly-progress">
+        <h4>내 배틀 활동</h4>
+        <div class="week-dots">
+          <div class="week-dot"><div class="dot-label">1주차</div><div class="dot unchecked">−</div></div>
+          <div class="week-dot"><div class="dot-label">2주차</div><div class="dot unchecked">−</div></div>
+          <div class="week-dot"><div class="dot-label">3주차</div><div class="dot checked">✓</div></div>
+          <div class="week-dot"><div class="dot-label">4주차</div><div class="dot unchecked">−</div></div>
+        </div>
+      </div>
+      <button class="btn-verify-full" onclick="openVerifySubmit()">인증하기</button>
+      <div class="verify-note">※ 4주차 내 총 2회 인증 필수 입니다.</div>
+      <div class="battle-status">
+        <h4>배틀 현황</h4>
+        <div class="bs-row"><span class="bs-icon">💰</span><span class="bs-label">총 상금</span><span class="bs-value">225,000원</span></div>
+        <div class="bs-row"><span class="bs-icon">⚖</span><span class="bs-label">현재 체중</span><span class="bs-value">52kg</span><span class="bs-date">25.11.19 기준</span></div>
+        <div class="bs-row"><span class="bs-icon">📊</span><span class="bs-label">내 순위</span><span class="bs-value">8위</span><span class="bs-date">25.11.20 기준</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="verify-section">
+    <h3>참가 중인 챌린지</h3>
+    <div class="active-battle-card">
+      <div class="abc-header">
+        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=80&h=80&fit=crop" onerror="this.style.background='#ddd'">
+        <div class="abc-info">
+          <div class="abc-title">이번에는 꼭 바프 성공하고 상금까지...</div>
+          <div class="abc-date">📅 25.10.29 - 25.11.25</div>
+        </div>
+      </div>
+      <div class="weekly-progress">
+        <h4>내 배틀 활동</h4>
+        <div class="week-dots">
+          <div class="week-dot"><div class="dot-label">1주차</div><div class="dot checked">✓</div></div>
+          <div class="week-dot"><div class="dot-label">2주차</div><div class="dot unchecked">−</div></div>
+          <div class="week-dot"><div class="dot-label">3주차</div><div class="dot checked">✓</div></div>
+          <div class="week-dot"><div class="dot-label">4주차</div><div class="dot unchecked">−</div></div>
+        </div>
+      </div>
+      <button class="btn-verify-full disabled">인증하기</button>
+      <div class="verify-note">※ 4주차 내 총 2회 인증 필수 입니다.</div>
+      <div class="battle-status">
+        <h4>배틀 현황</h4>
+        <div class="bs-row"><span class="bs-icon">💰</span><span class="bs-label">총 상금</span><span class="bs-value">750,000원</span></div>
+        <div class="bs-row"><span class="bs-icon">⚖</span><span class="bs-label">현재 체중</span><span class="bs-value">52kg</span><span class="bs-date">25.11.21 기준</span></div>
+        <div class="bs-row"><span class="bs-icon">📊</span><span class="bs-label">내 순위</span><span class="bs-value">10위</span><span class="bs-date">25.11.21 기준</span></div>
+      </div>
+    </div>
+  </div>
+  <div style="height:80px"></div>
+
+  <div class="tab-bar">
+    <div class="tab-item" onclick="switchTab('coupon')"><div class="tab-icon">🎟</div><div class="tab-label">쿠폰</div></div>
+    <div class="tab-item" onclick="switchTab('search')"><div class="tab-icon">🔍</div><div class="tab-label">검색</div></div>
+    <div class="tab-item" onclick="switchTab('home')"><div class="tab-icon">🏠</div><div class="tab-label">홈</div></div>
+    <div class="tab-item active" onclick="switchTab('verification')"><div class="tab-icon">✅</div><div class="tab-label">인증</div></div>
+    <div class="tab-item" onclick="switchTab('mypage')"><div class="tab-icon">👤</div><div class="tab-label">마이</div></div>
+  </div>
+</div>
+
+<!-- ========== SEARCH ========== -->
+<div class="screen hidden" id="search">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header"><h2>검색</h2></div>
+  <div class="search-title">어떤 배틀을<br>찾고 계시나요?</div>
+  <div class="search-bar">
+    <input type="text" placeholder="원하는 검색어를 입력해 주세요.">
+    <span class="search-icon">🔍</span>
+  </div>
+  <div class="keyword-section">
+    <h3>추천 검색 키워드</h3>
+    <div class="keyword-grid">
+      <div class="keyword-card"><div class="kw-icon" style="color:#E91E63">♀</div><div class="kw-label">여성</div></div>
+      <div class="keyword-card"><div class="kw-icon" style="color:#F44336">♂</div><div class="kw-label">남성</div></div>
+      <div class="keyword-card"><div class="kw-icon">🚩</div><div class="kw-label">배틀 (1등)</div></div>
+      <div class="keyword-card"><div class="kw-icon">🏆</div><div class="kw-label">챌린지 (1/n)</div></div>
+      <div class="keyword-card"><div class="kw-icon">🏋</div><div class="kw-label">진행 중</div></div>
+      <div class="keyword-card"><div class="kw-icon">⏰</div><div class="kw-label">오픈 예정</div></div>
+    </div>
+  </div>
+  <div class="creators-section">
+    <h3>배틀 개설자들</h3>
+    <div class="creators-scroll">
+      <div class="creator"><div class="cr-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop" onerror=""></div><div class="cr-badge"><span>👑</span></div><div class="cr-name">러너홀릭</div></div>
+      <div class="creator"><div class="cr-avatar" style="border-color:#9C27B0"><img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=80&h=80&fit=crop" onerror=""></div><div class="cr-badge"><span>👑</span></div><div class="cr-name">봄날의햇살</div></div>
+      <div class="creator"><div class="cr-avatar" style="border-color:#4CAF50"><img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=80&h=80&fit=crop" onerror=""></div><div class="cr-badge"><span>👑</span></div><div class="cr-name">맑은하루</div></div>
+      <div class="creator"><div class="cr-avatar"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop" onerror=""></div><div class="cr-badge"><span>👑</span></div><div class="cr-name">러닝이좋아</div></div>
+      <div class="creator"><div class="cr-avatar" style="border-color:#9C27B0"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop" onerror=""></div><div class="cr-badge"><span>👑</span></div><div class="cr-name">달리기는...</div></div>
+    </div>
+  </div>
+  <div style="height:80px"></div>
+
+  <div class="tab-bar">
+    <div class="tab-item" onclick="switchTab('coupon')"><div class="tab-icon">🎟</div><div class="tab-label">쿠폰</div></div>
+    <div class="tab-item active" onclick="switchTab('search')"><div class="tab-icon">🔍</div><div class="tab-label">검색</div></div>
+    <div class="tab-item" onclick="switchTab('home')"><div class="tab-icon">🏠</div><div class="tab-label">홈</div></div>
+    <div class="tab-item" onclick="switchTab('verification')"><div class="tab-icon">✅</div><div class="tab-label">인증</div></div>
+    <div class="tab-item" onclick="switchTab('mypage')"><div class="tab-icon">👤</div><div class="tab-label">마이</div></div>
+  </div>
+</div>
+
+<!-- ========== COUPON ========== -->
+<div class="screen hidden" id="coupon">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header"><h2>쿠폰</h2></div>
+  <div class="empty-state" style="padding-top:120px">
+    <img class="logo-img" src="data:image/svg+xml,%3Csvg viewBox='0 0 100 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15,5 C55,22 55,98 15,115 C32,98 32,22 15,5Z' fill='%23E31E24'/%3E%3Cpath d='M85,5 C45,22 45,98 85,115 C68,98 68,22 85,5Z' fill='%23E31E24'/%3E%3C/svg%3E" alt="">
+    <h4>보유한 쿠폰이 없어요</h4>
+    <p>배틀에서 우승하고<br>쿠폰을 받아보세요!</p>
+  </div>
+  <div style="flex:1"></div>
+
+  <div class="tab-bar" style="position:absolute;bottom:0;left:0;right:0">
+    <div class="tab-item active" onclick="switchTab('coupon')"><div class="tab-icon">🎟</div><div class="tab-label">쿠폰</div></div>
+    <div class="tab-item" onclick="switchTab('search')"><div class="tab-icon">🔍</div><div class="tab-label">검색</div></div>
+    <div class="tab-item" onclick="switchTab('home')"><div class="tab-icon">🏠</div><div class="tab-label">홈</div></div>
+    <div class="tab-item" onclick="switchTab('verification')"><div class="tab-icon">✅</div><div class="tab-label">인증</div></div>
+    <div class="tab-item" onclick="switchTab('mypage')"><div class="tab-icon">👤</div><div class="tab-label">마이</div></div>
+  </div>
+</div>
+
+<!-- ========== MY PAGE ========== -->
+<div class="screen hidden" id="mypage">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header"><h2>마이</h2><span style="position:absolute;right:20px;font-size:20px;cursor:pointer">⚙</span></div>
+
+  <div class="my-profile">
+    <div class="my-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop" onerror=""></div>
+    <span class="my-name">러너홀릭</span>
+    <button class="btn-edit-profile">내 정보 수정</button>
+  </div>
+
+  <div class="prize-card">
+    <div><div class="prize-label">내 상금</div><div class="prize-amount">2,530,000원</div></div>
+    <button class="btn-prize-history">적립 내역</button>
+  </div>
+
+  <div class="stats-card">
+    <div class="sc-item"><div class="sc-icon">🏆</div><div class="sc-label">우승 3</div></div>
+    <div class="sc-item"><div class="sc-icon">🎟</div><div class="sc-label">쿠폰 5</div></div>
+  </div>
+
+  <div class="my-section">
+    <div class="my-section-header">참가 중인 배틀 <span class="count">5</span><span class="arrow" style="margin-left:auto">›</span></div>
+    <div class="my-battle-item">
+      <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=60&h=60&fit=crop" onerror="this.style.background='#ddd'">
+      <div><div class="mbi-title">누가 먼저 목표 달성하고 상금을 가져...</div><div class="mbi-date">📅 25.10.29 - 25.11.25</div></div>
+    </div>
+    <div class="my-battle-item">
+      <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=60&h=60&fit=crop" onerror="this.style.background='#ddd'">
+      <div><div class="mbi-title">이번에는 꼭 바프 성공하고 상금까지...</div><div class="mbi-date">📅 25.11.12 - 25.12.09</div></div>
+    </div>
+    <div class="my-battle-item">
+      <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=60&h=60&fit=crop" onerror="this.style.background='#ddd'">
+      <div><div class="mbi-title">너랑 나랑 우리랑! 모두 다 같이 체지...</div><div class="mbi-date">📅 25.10.30 - 25.11.26</div></div>
+    </div>
+  </div>
+
+  <div class="my-section">
+    <div class="my-section-header">참가 중인 챌린지 <span class="count">0</span><span class="arrow" style="margin-left:auto">›</span></div>
+    <div style="padding:20px;text-align:center;color:#999;font-size:13px">참여한 챌린지가 없어요.</div>
+  </div>
+
+  <div class="my-section">
+    <div class="my-label-header">내역</div>
+    <div class="my-list-item">참가 내역 <span class="arrow">›</span></div>
+    <div class="my-list-item">우승 내역 <span class="arrow">›</span></div>
+  </div>
+
+  <div class="my-section">
+    <div class="my-label-header">환경 설정</div>
+    <div class="my-list-item">공지사항 <span class="arrow">›</span></div>
+    <div class="my-list-item">고객센터 <span class="arrow">›</span></div>
+    <div class="my-list-item" onclick="navigateTo('policy')">이용 및 정책 <span class="arrow">›</span></div>
+  </div>
+
+  <div class="my-section" style="margin-bottom:100px">
+    <div class="app-info">앱 정보 <span style="margin-left:auto"><span class="badge-new">최신</span> v 1.0</span></div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab-item" onclick="switchTab('coupon')"><div class="tab-icon">🎟</div><div class="tab-label">쿠폰</div></div>
+    <div class="tab-item" onclick="switchTab('search')"><div class="tab-icon">🔍</div><div class="tab-label">검색</div></div>
+    <div class="tab-item" onclick="switchTab('home')"><div class="tab-icon">🏠</div><div class="tab-label">홈</div></div>
+    <div class="tab-item" onclick="switchTab('verification')"><div class="tab-icon">✅</div><div class="tab-label">인증</div></div>
+    <div class="tab-item active" onclick="switchTab('mypage')"><div class="tab-icon">👤</div><div class="tab-label">마이</div></div>
+  </div>
+</div>
+
+<!-- ========== CREATE BATTLE ========== -->
+<div class="screen hidden" id="createBattle">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header">
+    <button class="back-btn" onclick="navigateTo('verification')">‹</button>
+    <h2>배틀 개설</h2>
+  </div>
+  <div class="create-form">
+    <div class="form-group">
+      <label>대표 이미지</label>
+      <div class="img-upload"><span class="plus">＋</span></div>
+    </div>
+    <div class="form-group">
+      <label>배틀명</label>
+      <input type="text" placeholder="배틀명을 입력해 주세요.">
+    </div>
+    <div class="form-group">
+      <label>배틀 설명</label>
+      <textarea placeholder="배틀에 대한 설명을 입력해 주세요."></textarea>
+    </div>
+    <div class="form-group">
+      <label>배틀 기간</label>
+      <div class="date-row">
+        <div class="date-input"><input type="text" placeholder="0000.00.00">📅</div>
+        <span class="date-separator">—</span>
+        <div class="date-input"><input type="text" placeholder="0000.00.00">📅</div>
+      </div>
+      <div class="create-note">※ 완료일은 시작일로부터 4주 후로 자동 설정됩니다.</div>
+    </div>
+    <div class="form-group">
+      <label>성별</label>
+      <div class="gender-btns">
+        <button class="gender-btn active">남성</button>
+        <button class="gender-btn" onclick="this.classList.toggle('active')">여성</button>
+        <button class="gender-btn" onclick="this.classList.toggle('active')">무관</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>참가 가능 체중 (kg)</label>
+      <div class="weight-row">
+        <input type="number" placeholder="0">
+        <span class="date-separator">—</span>
+        <input type="number" placeholder="0">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>참가비 (원)</label>
+      <input type="number" placeholder="참가비를 입력해 주세요.">
+    </div>
+    <button class="btn-create" onclick="alert('배틀이 생성되었습니다!')">배틀 만들기</button>
+  </div>
+</div>
+
+<!-- ========== BEFORE & AFTER ========== -->
+<div class="screen hidden" id="beforeAfter">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="home-header">
+    <span class="logo-sm"><img class="logo-img" src="data:image/svg+xml,%3Csvg viewBox='0 0 100 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15,5 C55,22 55,98 15,115 C32,98 32,22 15,5Z' fill='%23E31E24'/%3E%3Cpath d='M85,5 C45,22 45,98 85,115 C68,98 68,22 85,5Z' fill='%23E31E24'/%3E%3C/svg%3E" alt=""></span>
+    <div class="header-icons"><span>🔔</span><span>☰</span></div>
+  </div>
+  <div class="ba-container">
+    <div class="ba-kg-selector" id="baKgSelector">
+      <button class="ba-kg-btn" data-kg="5" onclick="selectKg(5)">-5KG</button>
+      <button class="ba-kg-btn" data-kg="10" onclick="selectKg(10)">-10KG</button>
+      <button class="ba-kg-btn" data-kg="15" onclick="selectKg(15)">-15KG</button>
+      <button class="ba-kg-btn active" data-kg="20" onclick="selectKg(20)">-20KG</button>
+      <button class="ba-kg-btn" data-kg="25" onclick="selectKg(25)">-25KG</button>
+      <button class="ba-kg-btn" data-kg="30" onclick="selectKg(30)">-30KG</button>
+    </div>
+
+    <div class="ba-labels">
+      <span class="ba-label">Before</span>
+      <span class="ba-label">After</span>
+    </div>
+
+    <div class="ba-photos">
+      <div class="ba-photo ba-before" id="baBeforeArea">
+        <div class="ba-placeholder" id="baPlaceholder">
+          <div style="font-size:48px">📷</div>
+          <p>내 사진을<br>촬영해주세요</p>
+          <button class="ba-capture-btn" onclick="captureBeforePhoto()">촬영하기</button>
+        </div>
+        <img id="baBeforeImg" style="display:none">
+      </div>
+      <div class="ba-photo ba-after" id="baAfterArea">
+        <div class="ba-placeholder" id="baAfterPlaceholder">
+          <div style="font-size:48px;opacity:0.4">🪞</div>
+          <p style="color:#bbb">감량 후<br>나의 모습</p>
+        </div>
+        <canvas id="baAfterCanvas" style="display:none"></canvas>
+        <div class="ba-processing" id="baProcessing" style="display:none">
+          <div class="ba-spinner"></div>
+          AI 시뮬레이션 중...
+        </div>
+      </div>
+    </div>
+
+    <div class="ba-text">
+      <p>누구든 5명 이상만 모이면 우리만의 배틀을 개설할 수 있습니다.</p>
+      <p>건강을 위해, 친목을 위해, 단합을 위해, 즐거움을 위해!<br>우리만의 배틀을 개설해볼까요?</p>
+    </div>
+
+    <button class="ba-cta" onclick="showCreateModal()">개설 시작하기</button>
+    <button class="ba-retake" id="baRetakeBtn" style="display:none" onclick="captureBeforePhoto()">다시 촬영하기</button>
+  </div>
+
+  <input type="file" accept="image/*" capture="user" id="cameraInput" style="display:none" onchange="handlePhotoCapture(event)">
+
+  <div class="tab-bar">
+    <div class="tab-item" onclick="switchTab('coupon')"><div class="tab-icon">🎟</div><div class="tab-label">쿠폰</div></div>
+    <div class="tab-item" onclick="switchTab('search')"><div class="tab-icon">🔍</div><div class="tab-label">검색</div></div>
+    <div class="tab-item active" onclick="switchTab('home')"><div class="tab-icon">🏠</div><div class="tab-label">홈</div></div>
+    <div class="tab-item" onclick="switchTab('verification')"><div class="tab-icon">✅</div><div class="tab-label">인증</div></div>
+    <div class="tab-item" onclick="switchTab('mypage')"><div class="tab-icon">👤</div><div class="tab-label">마이</div></div>
+  </div>
+</div>
+
+<!-- ========== POLICY LIST ========== -->
+<div class="screen hidden" id="policy">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header">
+    <button class="back-btn" onclick="navigateTo('mypage')">‹</button>
+    <h2>이용 및 정책</h2>
+  </div>
+  <div class="policy-list">
+    <div class="policy-list-item" onclick="navigateTo('terms')">이용약관 <span class="arrow">›</span></div>
+    <div class="policy-list-item" onclick="navigateTo('privacy')">개인정보처리방침 <span class="arrow">›</span></div>
+    <div class="policy-list-item" onclick="navigateTo('refundPolicy')">환불정책 <span class="arrow">›</span></div>
+  </div>
+</div>
+
+<!-- ========== TERMS OF SERVICE ========== -->
+<div class="screen hidden" id="terms">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header">
+    <button class="back-btn" onclick="navigateTo('policy')">‹</button>
+    <h2>이용약관</h2>
+  </div>
+  <div class="policy-body">
+    <div class="policy-date">시행일: 2025년 1월 1일</div>
+
+    <h3>제1조 (목적)</h3>
+    <p>본 약관은 주식회사 다이어트배틀(이하 "회사")이 제공하는 다이어트배틀 서비스(이하 "서비스")의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</p>
+
+    <h3>제2조 (정의)</h3>
+    <ul>
+      <li>"서비스"란 회사가 제공하는 다이어트 배틀, 챌린지, 인증, 상금 관련 모든 서비스를 의미합니다.</li>
+      <li>"회원"이란 본 약관에 동의하고 회원가입을 완료한 자를 의미합니다.</li>
+      <li>"배틀"이란 참가자들이 참가비를 내고 다이어트 목표 달성을 겨루는 서비스를 의미합니다.</li>
+      <li>"챌린지"란 개인이 목표를 설정하고 달성 시 보상을 받는 서비스를 의미합니다.</li>
+      <li>"상금"이란 배틀 또는 챌린지에서 목표를 달성한 회원에게 지급되는 금전적 보상을 의미합니다.</li>
+    </ul>
+
+    <h3>제3조 (약관의 효력 및 변경)</h3>
+    <ul>
+      <li>본 약관은 서비스 화면에 게시하거나 기타의 방법으로 회원에게 공지함으로써 효력이 발생합니다.</li>
+      <li>회사는 관련 법령을 위배하지 않는 범위에서 본 약관을 개정할 수 있습니다.</li>
+      <li>약관이 변경되는 경우 회사는 변경사항을 시행일자 7일 전부터 공지합니다.</li>
+    </ul>
+
+    <h3>제4조 (회원가입)</h3>
+    <ul>
+      <li>이용자는 회사가 정한 가입 절차에 따라 회원가입을 신청합니다.</li>
+      <li>회사는 다음 각 호에 해당하는 경우 회원가입을 거부할 수 있습니다.</li>
+      <li>가입 신청자가 본 약관에 의하여 이전에 회원자격을 상실한 적이 있는 경우</li>
+      <li>실명이 아니거나 타인의 명의를 이용한 경우</li>
+      <li>허위의 정보를 기재하거나 필수사항을 기재하지 않은 경우</li>
+    </ul>
+
+    <h3>제5조 (서비스의 제공)</h3>
+    <ul>
+      <li>회사는 다음과 같은 서비스를 제공합니다.</li>
+      <li>다이어트 배틀 개설 및 참가 서비스</li>
+      <li>다이어트 챌린지 개설 및 참가 서비스</li>
+      <li>체중 인증 및 기록 서비스</li>
+      <li>상금 적립 및 출금 서비스</li>
+      <li>기타 회사가 정하는 서비스</li>
+    </ul>
+
+    <h3>제6조 (배틀 및 챌린지 참가)</h3>
+    <ul>
+      <li>회원은 참가비를 결제한 후 배틀 또는 챌린지에 참가할 수 있습니다.</li>
+      <li>배틀 시작 전까지 참가 취소 및 환불이 가능합니다.</li>
+      <li>배틀이 시작된 이후에는 참여 여부와 관계없이 참가비 환불이 불가합니다.</li>
+      <li>참가자는 정해진 기간 내에 인증을 완료해야 합니다.</li>
+    </ul>
+
+    <h3>제7조 (인증 및 상금)</h3>
+    <ul>
+      <li>인증은 회사가 정한 방법 및 기간에 따라 진행됩니다.</li>
+      <li>허위 인증, 조작된 사진, 타인의 인증 도용 등 부정행위가 확인될 경우 참가 자격이 박탈되며 상금 지급이 취소됩니다.</li>
+      <li>상금은 배틀 종료 후 영업일 기준 7일 이내에 지급됩니다.</li>
+      <li>상금 출금 시 관련 세금은 회원이 부담합니다.</li>
+    </ul>
+
+    <h3>제8조 (회원의 의무)</h3>
+    <ul>
+      <li>회원은 관계 법령, 본 약관의 규정, 이용안내 등을 준수하여야 합니다.</li>
+      <li>회원은 자신의 계정 정보를 안전하게 관리할 책임이 있습니다.</li>
+      <li>타인의 개인정보를 도용하거나 부정하게 사용하여서는 안 됩니다.</li>
+      <li>서비스를 이용하여 법령 또는 공서양속에 반하는 행위를 하여서는 안 됩니다.</li>
+    </ul>
+
+    <h3>제9조 (서비스 이용 제한)</h3>
+    <p>회사는 회원이 본 약관의 의무를 위반하거나 서비스의 정상적인 운영을 방해한 경우, 서비스 이용을 제한하거나 회원자격을 상실시킬 수 있습니다.</p>
+
+    <h3>제10조 (면책사항)</h3>
+    <ul>
+      <li>회사는 천재지변, 전쟁, 기간통신사업자의 서비스 중지 등 불가항력적인 사유로 서비스를 제공할 수 없는 경우 책임을 면합니다.</li>
+      <li>회사는 회원의 귀책사유로 인한 서비스 이용 장애에 대하여 책임을 지지 않습니다.</li>
+      <li>회사는 회원이 서비스를 통해 기대하는 다이어트 효과를 보증하지 않습니다.</li>
+    </ul>
+
+    <h3>제11조 (분쟁해결)</h3>
+    <p>본 약관에서 정하지 않은 사항과 본 약관의 해석에 관하여는 관계 법령 또는 상관례에 따릅니다. 서비스 이용과 관련하여 분쟁이 발생한 경우 회사의 본사 소재지를 관할하는 법원을 전속적 합의 관할 법원으로 합니다.</p>
+
+    <p style="margin-top:28px;padding-top:16px;border-top:1px solid #eee;color:#999;font-size:12px">부칙: 본 약관은 2025년 1월 1일부터 시행합니다.</p>
+  </div>
+</div>
+
+<!-- ========== PRIVACY POLICY ========== -->
+<div class="screen hidden" id="privacy">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header">
+    <button class="back-btn" onclick="navigateTo('policy')">‹</button>
+    <h2>개인정보처리방침</h2>
+  </div>
+  <div class="policy-body">
+    <div class="policy-date">시행일: 2025년 1월 1일</div>
+
+    <p>주식회사 다이어트배틀(이하 "회사")은 「개인정보 보호법」 등 관련 법령에 따라 이용자의 개인정보를 보호하고, 이와 관련한 고충을 신속하고 원활하게 처리하기 위하여 다음과 같이 개인정보처리방침을 수립·공개합니다.</p>
+
+    <h3>제1조 (수집하는 개인정보 항목)</h3>
+    <p>회사는 서비스 제공을 위해 다음 개인정보를 수집합니다.</p>
+    <table>
+      <tr><th>구분</th><th>수집 항목</th></tr>
+      <tr><td>필수</td><td>이메일, 비밀번호, 이름, 휴대폰 번호</td></tr>
+      <tr><td>선택</td><td>프로필 사진, 성별, 체중 정보</td></tr>
+      <tr><td>자동 수집</td><td>기기정보(OS, 기기모델), 접속 IP, 서비스 이용 기록</td></tr>
+      <tr><td>결제 시</td><td>결제 수단 정보, 결제 기록</td></tr>
+    </table>
+
+    <h3>제2조 (개인정보의 수집 및 이용 목적)</h3>
+    <ul>
+      <li>회원 가입 및 관리: 본인 확인, 가입 의사 확인, 회원 식별</li>
+      <li>서비스 제공: 배틀/챌린지 참가, 체중 인증, 순위 산정, 상금 지급</li>
+      <li>결제 및 정산: 참가비 결제, 상금 출금 처리</li>
+      <li>고객 지원: 민원 처리, 공지사항 전달</li>
+      <li>서비스 개선: 이용 통계 분석, 서비스 품질 향상</li>
+      <li>마케팅: 이벤트 및 광고성 정보 제공 (동의 시)</li>
+    </ul>
+
+    <h3>제3조 (개인정보의 보유 및 이용 기간)</h3>
+    <p>회사는 개인정보 수집 및 이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다. 단, 관련 법령에 의하여 보존할 필요가 있는 경우 아래와 같이 보관합니다.</p>
+    <table>
+      <tr><th>보존 항목</th><th>보존 기간</th><th>근거 법령</th></tr>
+      <tr><td>계약 또는 청약철회 기록</td><td>5년</td><td>전자상거래법</td></tr>
+      <tr><td>대금결제 및 재화 공급 기록</td><td>5년</td><td>전자상거래법</td></tr>
+      <tr><td>소비자 불만 또는 분쟁 처리 기록</td><td>3년</td><td>전자상거래법</td></tr>
+      <tr><td>로그인 기록</td><td>3개월</td><td>통신비밀보호법</td></tr>
+    </table>
+
+    <h3>제4조 (개인정보의 제3자 제공)</h3>
+    <p>회사는 원칙적으로 이용자의 개인정보를 제3자에게 제공하지 않습니다. 다만, 다음의 경우에는 예외로 합니다.</p>
+    <ul>
+      <li>이용자가 사전에 동의한 경우</li>
+      <li>법령의 규정에 의하거나, 수사 목적으로 법령에 정해진 절차와 방법에 따라 수사기관의 요구가 있는 경우</li>
+    </ul>
+
+    <h3>제5조 (개인정보 처리의 위탁)</h3>
+    <p>회사는 서비스 향상을 위해 다음과 같이 개인정보 처리 업무를 위탁하고 있습니다.</p>
+    <table>
+      <tr><th>수탁업체</th><th>위탁 업무</th></tr>
+      <tr><td>결제대행사(PG)</td><td>결제 처리 및 정산</td></tr>
+      <tr><td>클라우드 서비스</td><td>데이터 저장 및 관리</td></tr>
+      <tr><td>SMS 발송 업체</td><td>본인인증, 알림 발송</td></tr>
+    </table>
+
+    <h3>제6조 (개인정보의 파기)</h3>
+    <ul>
+      <li>보유 기간이 경과된 개인정보는 지체 없이 파기합니다.</li>
+      <li>전자적 파일: 복구 및 재생이 불가능한 방법으로 삭제</li>
+      <li>종이 문서: 분쇄기로 분쇄하거나 소각</li>
+    </ul>
+
+    <h3>제7조 (이용자의 권리)</h3>
+    <p>이용자는 언제든지 다음의 권리를 행사할 수 있습니다.</p>
+    <ul>
+      <li>개인정보 열람 요구</li>
+      <li>개인정보 정정·삭제 요구</li>
+      <li>개인정보 처리 정지 요구</li>
+      <li>회원 탈퇴 요구</li>
+    </ul>
+    <p>권리 행사는 앱 내 설정 또는 고객센터를 통해 가능합니다.</p>
+
+    <h3>제8조 (개인정보 보호책임자)</h3>
+    <table>
+      <tr><th>구분</th><th>내용</th></tr>
+      <tr><td>담당자</td><td>개인정보보호 담당부서</td></tr>
+      <tr><td>이메일</td><td>privacy@dietbattle.co.kr</td></tr>
+      <tr><td>전화번호</td><td>1588-0000</td></tr>
+    </table>
+
+    <h3>제9조 (개인정보 안전성 확보 조치)</h3>
+    <ul>
+      <li>개인정보의 암호화: 비밀번호, 체중 등 민감정보는 암호화하여 저장·관리합니다.</li>
+      <li>접근 제한: 개인정보에 대한 접근 권한을 최소한으로 제한합니다.</li>
+      <li>보안 프로그램 설치: 해킹 등에 대비하여 보안 프로그램을 설치하고 주기적으로 갱신합니다.</li>
+    </ul>
+
+    <p style="margin-top:28px;padding-top:16px;border-top:1px solid #eee;color:#999;font-size:12px">본 개인정보처리방침은 2025년 1월 1일부터 시행됩니다.</p>
+  </div>
+</div>
+
+<!-- ========== REFUND POLICY ========== -->
+<div class="screen hidden" id="refundPolicy">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header">
+    <button class="back-btn" onclick="navigateTo('policy')">‹</button>
+    <h2>환불정책</h2>
+  </div>
+  <div class="policy-body">
+    <div class="policy-date">시행일: 2025년 1월 1일</div>
+
+    <p>주식회사 다이어트배틀(이하 "회사")은 이용자의 권익 보호를 위해 다음과 같은 환불정책을 운영합니다.</p>
+
+    <h3>제1조 (환불 가능 기간)</h3>
+    <table>
+      <tr><th>구분</th><th>환불 가능 여부</th><th>환불 금액</th></tr>
+      <tr><td>배틀/챌린지 시작 전</td><td>가능</td><td>전액 환불</td></tr>
+      <tr><td>배틀/챌린지 시작 후</td><td>불가</td><td>-</td></tr>
+      <tr><td>결제 후 7일 이내<br>(시작 전에 한함)</td><td>가능</td><td>전액 환불</td></tr>
+    </table>
+
+    <h3>제2조 (환불 절차)</h3>
+    <ul>
+      <li>앱 내 고객센터 또는 이메일(support@dietbattle.co.kr)로 환불을 신청합니다.</li>
+      <li>환불 신청 시 회원 정보, 결제 정보, 환불 사유를 기재해 주셔야 합니다.</li>
+      <li>환불 접수 후 영업일 기준 3~7일 이내에 처리됩니다.</li>
+      <li>환불 완료 시 알림을 통해 안내드립니다.</li>
+    </ul>
+
+    <h3>제3조 (환불 방법)</h3>
+    <ul>
+      <li>결제 수단과 동일한 방법으로 환불됩니다.</li>
+      <li>신용카드: 카드사 취소 처리 (영업일 기준 3~7일)</li>
+      <li>계좌이체: 원 결제 계좌로 환불 (영업일 기준 3~5일)</li>
+      <li>간편결제(카카오페이, 네이버페이 등): 해당 서비스를 통한 환불</li>
+    </ul>
+
+    <h3>제4조 (환불이 제한되는 경우)</h3>
+    <ul>
+      <li>배틀 또는 챌린지가 이미 시작된 경우</li>
+      <li>참가 여부와 관계없이 배틀/챌린지 시작 이후에는 환불이 불가합니다.</li>
+      <li>이벤트성 결제, 할인 결제, 쿠폰 사용 결제의 경우 일부 환불이 제한될 수 있습니다.</li>
+      <li>부정행위(허위 인증, 계정 도용 등)로 인해 자격이 박탈된 경우 환불 대상에서 제외됩니다.</li>
+    </ul>
+
+    <h3>제5조 (특수한 경우의 환불)</h3>
+    <p>다음의 경우에는 배틀/챌린지 시작 이후에도 환불이 가능합니다.</p>
+    <ul>
+      <li>시스템 오류로 인한 중복 결제</li>
+      <li>회사의 귀책사유로 서비스가 정상적으로 제공되지 않은 경우</li>
+      <li>배틀/챌린지가 최소 인원 미달로 취소된 경우 (전액 환불)</li>
+    </ul>
+
+    <h3>제6조 (상금 관련)</h3>
+    <ul>
+      <li>상금은 배틀/챌린지 종료 후 영업일 기준 7일 이내에 앱 내 상금 계좌로 적립됩니다.</li>
+      <li>상금 출금 시 최소 출금 금액은 5,000원입니다.</li>
+      <li>상금 출금은 본인 명의 계좌로만 가능합니다.</li>
+      <li>부정행위가 확인된 경우 상금 지급이 취소되며, 이미 지급된 상금은 환수될 수 있습니다.</li>
+      <li>상금 관련 세금(기타소득세 등)은 관련 법령에 따라 원천징수 후 지급됩니다.</li>
+    </ul>
+
+    <h3>제7조 (문의)</h3>
+    <table>
+      <tr><th>구분</th><th>내용</th></tr>
+      <tr><td>고객센터</td><td>1588-0000</td></tr>
+      <tr><td>이메일</td><td>support@dietbattle.co.kr</td></tr>
+      <tr><td>운영시간</td><td>평일 09:00 ~ 18:00 (공휴일 제외)</td></tr>
+    </table>
+
+    <p style="margin-top:28px;padding-top:16px;border-top:1px solid #eee;color:#999;font-size:12px">본 환불정책은 2025년 1월 1일부터 시행됩니다.</p>
+  </div>
+</div>
+
+<!-- ========== VERIFY SUBMIT ========== -->
+<div class="screen hidden" id="verifySubmit">
+  <div class="status-bar" style="background:#fff"><span class="time">9:41</span><span class="icons">📶 📡 🔋</span></div>
+  <div class="screen-header">
+    <button class="back-btn" onclick="navigateTo('verification')">‹</button>
+    <h2>체중 인증</h2>
+  </div>
+  <div class="vs-body">
+    <div class="vs-photo-section">
+      <h3>📸 체중계 인증 사진</h3>
+      <p class="vs-desc">실시간 카메라로만 촬영 가능합니다. 갤러리 사진은 사용할 수 없습니다.</p>
+      <div class="vs-photo-area" id="vsPhotoArea" onclick="openLiveCamera()">
+        <div class="vs-placeholder" id="vsPlaceholder">
+          <div style="font-size:40px">📷</div>
+          <p>실시간 촬영하기</p>
+        </div>
+        <img id="vsPhotoImg" style="display:none">
+      </div>
+      <p style="font-size:11px;color:#e31e24;margin-top:6px;font-weight:600">* 부정행위 방지를 위해 실시간 카메라 촬영만 허용됩니다</p>
+    </div>
+
+    <div class="vs-weight-section">
+      <h3>⚖️ 현재 체중</h3>
+      <div class="vs-weight-row">
+        <input type="number" id="vsWeightInput" placeholder="0.0" step="0.1">
+        <span class="vs-unit">kg</span>
+      </div>
+    </div>
+
+    <div class="vs-date-section">
+      <h3>📅 인증 날짜</h3>
+      <div class="vs-date" id="vsDate"></div>
+    </div>
+
+    <div class="vs-memo-section">
+      <h3>💬 한마디 (선택)</h3>
+      <textarea class="vs-memo" id="vsMemo" placeholder="오늘의 다이어트 한마디를 적어보세요!"></textarea>
+    </div>
+
+    <button class="vs-submit" onclick="submitVerification()">인증 제출하기</button>
+  </div>
+</div>
+
+<!-- Verification Success Modal -->
+<div class="vs-success-modal" id="vsSuccessModal" style="display:none">
+  <div class="vs-modal-overlay" onclick="closeVerifySuccess()"></div>
+  <div class="vs-modal-content">
+    <div class="vs-check-circle">✓</div>
+    <h3>인증 완료!</h3>
+    <p>이번 주차 인증이 성공적으로<br>제출되었습니다.</p>
+    <div class="vs-result-row">
+      <span>제출 체중</span>
+      <span class="vs-result-weight" id="vsResultWeight">0kg</span>
+    </div>
+    <button class="vs-modal-btn" onclick="closeVerifySuccess()">확인</button>
+  </div>
+</div>
+
+<!-- ========== LIVE CAMERA OVERLAY ========== -->
+<div class="cam-overlay" id="camOverlay">
+  <div class="cam-header">
+    <h3>체중계 실시간 촬영</h3>
+    <button class="cam-close" onclick="closeLiveCamera()">✕</button>
+  </div>
+  <div class="cam-warning">부정행위 방지: 실시간 촬영만 허용 | 타임스탬프 자동 기록</div>
+  <div class="cam-video-wrap">
+    <video id="camVideo" autoplay playsinline muted></video>
+    <div class="cam-guide">
+      <div class="cam-guide-text">체중계 숫자가<br>보이도록 촬영</div>
+    </div>
+    <div class="cam-code-box" id="camCode"></div>
+    <div class="cam-info">
+      <div class="cam-timestamp" id="camTimestamp"></div>
+    </div>
+  </div>
+  <div class="cam-controls">
+    <button class="cam-capture-btn" onclick="captureVerifyPhoto()"></button>
+  </div>
+</div>
+
+<!-- ========== GLP-1 DECLARATION MODAL ========== -->
+<div class="glp1-overlay" id="glp1Modal">
+  <div class="glp1-content">
+    <h3>GLP-1 약물 복용 확인</h3>
+    <div class="glp1-sub">공정한 배틀을 위해 약물 복용 여부를<br>반드시 확인합니다.</div>
+
+    <div class="glp1-section">
+      <h4>현재 GLP-1 약물을 복용 중이신가요?</h4>
+      <div class="glp1-option selected" onclick="selectGlp1(this, 'none')">
+        <div class="glp1-radio"></div>
+        <div class="glp1-opt-text">
+          <strong>복용하지 않습니다</strong>
+          <span>위고비, 마운자로, 삭센다 등 GLP-1 약물 미복용</span>
+        </div>
+      </div>
+      <div class="glp1-option" onclick="selectGlp1(this, 'current')">
+        <div class="glp1-radio"></div>
+        <div class="glp1-opt-text">
+          <strong>현재 복용 중입니다</strong>
+          <span>위고비(세마글루타이드), 마운자로(티르제파타이드) 등</span>
+        </div>
+      </div>
+      <div class="glp1-option" onclick="selectGlp1(this, 'past')">
+        <div class="glp1-radio"></div>
+        <div class="glp1-opt-text">
+          <strong>과거 복용 (현재 중단)</strong>
+          <span>최근 6개월 이내 복용 이력이 있으나 현재 중단</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="glp1-pledge">
+      <p>본인은 위 내용이 사실임을 확인하며, 허위 신고 시 참가 자격 박탈 및 상금 환수에 동의합니다. GLP-1 약물 복용자는 별도의 약물 사용자 리그로 배정되며, 미복용자 배틀 참가가 제한됩니다.</p>
+    </div>
+    <div class="glp1-check-row" id="glp1Agree" onclick="toggleGlp1Agree()">
+      <div class="glp1-checkbox">✓</div>
+      <div class="glp1-check-label">위 내용을 확인하고 동의합니다</div>
+    </div>
+
+    <div class="glp1-btns" style="margin-top:16px">
+      <button class="glp1-btn-cancel" onclick="closeGlp1Modal()">취소</button>
+      <button class="glp1-btn-confirm" id="glp1ConfirmBtn" onclick="confirmGlp1()">참가 신청</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== GLP-1 REPORT MODAL ========== -->
+<div class="report-modal" id="reportModal">
+  <div class="report-content">
+    <h3>🚨 약물 복용 의심 신고</h3>
+    <div class="report-option" onclick="selectReport(this)">비정상적으로 빠른 체중 감량</div>
+    <div class="report-option" onclick="selectReport(this)">GLP-1 약물 복용 목격/증거</div>
+    <div class="report-option" onclick="selectReport(this)">본인이 약물 복용 사실 언급</div>
+    <div class="report-option" onclick="selectReport(this)">기타 의심 사유</div>
+    <textarea class="report-textarea" id="reportDetail" placeholder="상세 내용을 입력해주세요 (선택)"></textarea>
+    <button class="report-submit" onclick="submitReport()">신고 접수하기</button>
+    <button class="glp1-btn-cancel" style="width:100%;margin-top:8px" onclick="closeReportModal()">취소</button>
+  </div>
+</div>
+
+<!-- ========== MODAL ========== -->
+<div class="modal-overlay hidden" id="createModal">
+  <div class="modal-content">
+    <h3>무엇을 개설할까요?</h3>
+    <div class="modal-options">
+      <div class="modal-option selected" onclick="openCreate('battle')">
+        <div class="mo-icon">🚩</div>
+        <div class="mo-title red">배틀</div>
+        <div class="mo-desc">인증하고 승리를<br>차지하세요</div>
+      </div>
+      <div class="modal-option" onclick="openCreate('challenge')">
+        <div class="mo-icon">🏆</div>
+        <div class="mo-title">챌린지</div>
+        <div class="mo-desc">나만의 페이스로<br>꾸준히 참여해요</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const screens = ['splash','login','signup','home','battleDetail','verification','search','coupon','mypage','createBattle','beforeAfter','policy','terms','privacy','refundPolicy','verifySubmit'];
+const tabScreens = ['coupon','search','home','verification','mypage'];
+let currentScreen = 'splash';
+
+function navigateTo(screenId) {
+  screens.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('active'); el.classList.add('hidden'); }
+  });
+  const target = document.getElementById(screenId);
+  if (target) { target.classList.remove('hidden'); target.classList.add('active'); target.scrollTop = 0; }
+  currentScreen = screenId;
+}
+
+function switchTab(tabId) {
+  navigateTo(tabId);
+  // Update tab active states for the target screen
+  const targetScreen = document.getElementById(tabId);
+  if (targetScreen) {
+    const tabs = targetScreen.querySelectorAll('.tab-item');
+    tabs.forEach((tab, i) => {
+      tab.classList.remove('active');
+      if (tabScreens[i] === tabId) tab.classList.add('active');
+    });
+  }
+}
+
+function showCreateModal() {
+  document.getElementById('createModal').classList.remove('hidden');
+}
+
+function hideCreateModal() {
+  document.getElementById('createModal').classList.add('hidden');
+}
+
+function openCreate(type) {
+  hideCreateModal();
+  navigateTo('createBattle');
+  const header = document.querySelector('#createBattle .screen-header h2');
+  const btn = document.querySelector('#createBattle .btn-create');
+  if (type === 'challenge') {
+    header.textContent = '챌린지 개설';
+    btn.textContent = '챌린지 만들기';
+  } else {
+    header.textContent = '배틀 개설';
+    btn.textContent = '배틀 만들기';
+  }
+}
+
+// Auto transition from splash
+setTimeout(() => navigateTo('login'), 2000);
+
+// Add click handler for 개설하기 buttons
+document.addEventListener('click', (e) => {
+  if (e.target.textContent === '개설하기' || e.target.closest('.btn-outline-red')?.textContent === '개설하기') {
+    showCreateModal();
+  }
+});
+
+// Close modal on overlay click
+document.getElementById('createModal').addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal-overlay')) hideCreateModal();
+});
+
+// Gender button toggle
+document.querySelectorAll('.gender-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// ========== Before & After ==========
+let baOriginalImage = null; // stores the original Image object
+let baSelectedKg = 20;
+
+function captureBeforePhoto() {
+  document.getElementById('cameraInput').click();
+}
+
+function selectKg(kg) {
+  baSelectedKg = kg;
+  document.querySelectorAll('.ba-kg-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.kg) === kg);
+  });
+  // If we already have a photo, re-render with new kg
+  if (baOriginalImage) {
+    renderAfterImage(baOriginalImage, kg);
+  }
+}
+
+function handlePhotoCapture(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      baOriginalImage = img;
+
+      // Show Before image
+      const beforeImg = document.getElementById('baBeforeImg');
+      beforeImg.src = e.target.result;
+      beforeImg.style.display = 'block';
+      document.getElementById('baPlaceholder').style.display = 'none';
+
+      // Render After with canvas
+      renderAfterImage(img, baSelectedKg);
+
+      // Show retake button
+      document.getElementById('baRetakeBtn').style.display = 'block';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+function renderAfterImage(img, kg) {
+  const canvas = document.getElementById('baAfterCanvas');
+  const ctx = canvas.getContext('2d');
+  const proc = document.getElementById('baProcessing');
+
+  proc.style.display = 'flex';
+  canvas.style.display = 'none';
+  document.getElementById('baAfterPlaceholder').style.display = 'none';
+
+  setTimeout(() => {
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    canvas.width = w;
+    canvas.height = h;
+
+    const srcCanvas = document.createElement('canvas');
+    srcCanvas.width = w; srcCanvas.height = h;
+    const srcCtx = srcCanvas.getContext('2d');
+    srcCtx.drawImage(img, 0, 0, w, h);
+
+    // Warp intensity scales with kg, capped for stability
+    const intensity = Math.min(0.92, (kg + 2) * 0.027);
+    let usedPixelWarp = false;
+
+    // Smoothstep helper for natural boundary transitions
+    function sstep(a, b, x) {
+      const t = Math.max(0, Math.min(1, (x - a) / (b - a)));
+      return t * t * (3 - 2 * t);
+    }
+
+    try {
+      const srcData = srcCtx.getImageData(0, 0, w, h);
+      const dstData = ctx.createImageData(w, h);
+      usedPixelWarp = true;
+
+      for (let y = 0; y < h; y++) {
+        const yR = y / h;
+
+        // === REALISTIC BODY MODEL ===
+        // slim: how much this body zone narrows (0=none, 1=maximum)
+        // bw: estimated half-width of body at this level (as fraction of image width)
+        // vShift: vertical displacement for belly flattening
+        let slim, bw, vShift = 0;
+
+        if (yR < 0.04) {
+          // Top of head: no change
+          slim = 0; bw = 0.09;
+        } else if (yR < 0.08) {
+          // Upper face: slight
+          slim = 0.20 * ((yR - 0.04) / 0.04); bw = 0.11;
+        } else if (yR < 0.14) {
+          // Face/jawline: noticeable slimming (double chin, round face → slim face)
+          slim = 0.38; bw = 0.15;
+        } else if (yR < 0.17) {
+          // Chin to neck transition
+          const t = (yR - 0.14) / 0.03;
+          slim = 0.38 - 0.18 * t; bw = 0.15 - 0.06 * t;
+        } else if (yR < 0.21) {
+          // Neck: minimal
+          slim = 0.12; bw = 0.07;
+        } else if (yR < 0.27) {
+          // SHOULDERS: barely changes (bone structure stays the same!)
+          // This differential vs waist is what makes it look REAL
+          slim = 0.05; bw = 0.40;
+        } else if (yR < 0.33) {
+          // Upper chest: gradual increase
+          const t = (yR - 0.27) / 0.06;
+          slim = 0.05 + 0.30 * t; bw = 0.38 - 0.04 * t;
+        } else if (yR < 0.39) {
+          // Lower chest / upper belly: ramping up strongly
+          const t = (yR - 0.33) / 0.06;
+          slim = 0.35 + 0.40 * t; bw = 0.34 - 0.02 * t;
+        } else if (yR < 0.53) {
+          // ★★ WAIST / BELLY: MAXIMUM SLIMMING ★★
+          // This is where fat loss is most visible
+          const t = (yR - 0.39) / 0.14;
+          const peak = Math.sin(t * Math.PI);
+          slim = 0.80 + 0.20 * peak; // peaks at 1.0!
+          bw = 0.32;
+          // Belly flattening: slight upward pull
+          vShift = -intensity * 0.020 * peak;
+        } else if (yR < 0.60) {
+          // Lower belly / upper hip: still very strong
+          const t = (yR - 0.53) / 0.07;
+          slim = 0.88 - 0.13 * t; bw = 0.33;
+        } else if (yR < 0.70) {
+          // Hips: strong slimming (love handles disappear)
+          const t = (yR - 0.60) / 0.10;
+          slim = 0.75 - 0.12 * t; bw = 0.33 - 0.03 * t;
+        } else if (yR < 0.82) {
+          // Thighs: moderate slimming
+          const t = (yR - 0.70) / 0.12;
+          slim = 0.63 - 0.23 * t; bw = 0.30 - 0.08 * t;
+        } else if (yR < 0.93) {
+          // Calves: light slimming
+          const t = (yR - 0.82) / 0.11;
+          slim = 0.40 - 0.30 * t; bw = 0.22 - 0.07 * t;
+        } else {
+          // Feet: almost none
+          slim = 0.03; bw = 0.14;
+        }
+
+        for (let x = 0; x < w; x++) {
+          const xR = x / w;
+          const dfc = Math.abs(xR - 0.5); // distance from center
+
+          // BODY-SHAPED MASK: sharp boundary that preserves background
+          // Smooth transition from full effect inside body to zero outside
+          const innerEdge = bw * 0.5;
+          const outerEdge = bw * 1.6;
+          let mask;
+          if (dfc < innerEdge) {
+            mask = 1.0;
+          } else if (dfc < outerEdge) {
+            mask = 1.0 - sstep(innerEdge, outerEdge, dfc);
+          } else {
+            mask = 0.0;
+          }
+
+          // Horizontal displacement: body compresses toward center
+          // (xR - 0.5) gives correct inverse-mapping direction for slimming
+          const hDisp = (xR - 0.5) * intensity * slim * mask;
+
+          // Vertical displacement: belly flattening
+          const vDisp = vShift * mask;
+
+          // Source pixel (inverse mapping with bilinear interpolation)
+          const srcXf = Math.max(0, Math.min(w - 1.001, x + hDisp * w));
+          const srcYf = Math.max(0, Math.min(h - 1.001, y + vDisp * h));
+
+          const sx = Math.floor(srcXf); const fx = srcXf - sx;
+          const sx2 = Math.min(w - 1, sx + 1);
+          const sy = Math.floor(srcYf); const fy = srcYf - sy;
+          const sy2 = Math.min(h - 1, sy + 1);
+
+          const di = (y * w + x) * 4;
+          const i00 = (sy * w + sx) * 4;
+          const i10 = (sy * w + sx2) * 4;
+          const i01 = (sy2 * w + sx) * 4;
+          const i11 = (sy2 * w + sx2) * 4;
+
+          for (let c = 0; c < 3; c++) {
+            const top = srcData.data[i00+c] * (1-fx) + srcData.data[i10+c] * fx;
+            const bot = srcData.data[i01+c] * (1-fx) + srcData.data[i11+c] * fx;
+            dstData.data[di+c] = top * (1-fy) + bot * fy;
+          }
+          dstData.data[di+3] = 255;
+        }
+      }
+
+      ctx.putImageData(dstData, 0, 0);
+
+    } catch (e) {
+      // CORS fallback: column-based body-shaped warp using drawImage
+      ctx.drawImage(srcCanvas, 0, 0, w, h);
+      const cols = 50, cw = w / cols;
+
+      for (let y = 0; y < h; y += 3) {
+        const yr = y / h;
+        let sl, bw2;
+        if (yr < 0.04) { sl=0; bw2=0.09; }
+        else if (yr < 0.14) { sl=0.38; bw2=0.15; }
+        else if (yr < 0.21) { sl=0.12; bw2=0.07; }
+        else if (yr < 0.27) { sl=0.05; bw2=0.40; }
+        else if (yr < 0.33) { let t=(yr-0.27)/0.06; sl=0.05+0.30*t; bw2=0.38-0.04*t; }
+        else if (yr < 0.53) { let t=(yr-0.33)/0.20; sl=0.35+0.65*Math.sin(t*Math.PI); bw2=0.32; }
+        else if (yr < 0.60) { sl=0.80; bw2=0.33; }
+        else if (yr < 0.70) { sl=0.70; bw2=0.31; }
+        else if (yr < 0.82) { sl=0.50; bw2=0.26; }
+        else if (yr < 0.93) { sl=0.25; bw2=0.18; }
+        else { sl=0.03; bw2=0.14; }
+
+        const sh = Math.min(3, h - y);
+        for (let c = 0; c < cols; c++) {
+          const xr = (c + 0.5) / cols;
+          const dfc2 = Math.abs(xr - 0.5);
+          if (dfc2 > bw2 * 1.6) continue;
+          const inner = bw2 * 0.5;
+          const outer = bw2 * 1.6;
+          let msk = dfc2 < inner ? 1.0 : Math.max(0, 1.0 - (dfc2 - inner) / (outer - inner));
+          const dx = (xr - 0.5) * intensity * sl * msk * w;
+          if (Math.abs(dx) < 0.5) continue;
+          ctx.drawImage(srcCanvas, c * cw, y, cw, sh, c * cw + dx, y, cw, sh);
+        }
+      }
+    }
+
+    // Post-processing: warm healthy glow (weight loss → healthier appearance)
+    ctx.globalCompositeOperation = 'screen';
+    ctx.fillStyle = 'rgba(255,245,230,' + Math.min(0.07, 0.015 + kg * 0.002) + ')';
+    ctx.fillRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'source-over';
+
+    // Subtle contrast boost for more defined features
+    ctx.globalCompositeOperation = 'overlay';
+    ctx.globalAlpha = Math.min(0.05, 0.015 + kg * 0.001);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+    ctx.globalAlpha = 1.0;
+    ctx.globalCompositeOperation = 'source-over';
+
+    proc.style.display = 'none';
+    canvas.style.display = 'block';
+    console.log('BA: ' + (usedPixelWarp ? 'PIXEL' : 'FALLBACK') + ' kg=' + kg + ' int=' + intensity.toFixed(3));
+  }, 300);
+}
+
+// ========== Verification (인증) ==========
+function openVerifySubmit() {
+  navigateTo('verifySubmit');
+  // Set today's date
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  document.getElementById('vsDate').textContent = y + '.' + m + '.' + d;
+}
+
+function handleVerifyPhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = document.getElementById('vsPhotoImg');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    document.getElementById('vsPlaceholder').style.display = 'none';
+    document.getElementById('vsPhotoArea').classList.add('has-photo');
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+function submitVerification() {
+  const weight = document.getElementById('vsWeightInput').value;
+  const hasPhoto = document.getElementById('vsPhotoImg').style.display === 'block';
+
+  if (!hasPhoto) { alert('체중계 인증 사진을 촬영해주세요.'); return; }
+  if (!weight) { alert('현재 체중을 입력해주세요.'); return; }
+
+  document.getElementById('vsResultWeight').textContent = weight + 'kg';
+  document.getElementById('vsSuccessModal').style.display = 'flex';
+}
+
+function closeVerifySuccess() {
+  document.getElementById('vsSuccessModal').style.display = 'none';
+  navigateTo('verification');
+  // Reset form
+  document.getElementById('vsPhotoImg').style.display = 'none';
+  document.getElementById('vsPlaceholder').style.display = '';
+  document.getElementById('vsPhotoArea').classList.remove('has-photo');
+  document.getElementById('vsWeightInput').value = '';
+  document.getElementById('vsMemo').value = '';
+}
+
+// ========== LIVE CAMERA (부정행위 방지) ==========
+let camStream = null;
+let camTimerRAF = null;
+let camVerifyCode = '';
+
+function generateVerifyCode() {
+  return String(Math.floor(1000 + Math.random() * 9000));
+}
+
+function openLiveCamera() {
+  const overlay = document.getElementById('camOverlay');
+  overlay.style.display = 'flex';
+  camVerifyCode = generateVerifyCode();
+  document.getElementById('camCode').textContent = camVerifyCode;
+
+  const video = document.getElementById('camVideo');
+  navigator.mediaDevices.getUserMedia({
+    video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } }
+  }).then(stream => {
+    camStream = stream;
+    video.srcObject = stream;
+    video.play();
+    updateCamTimestamp();
+  }).catch(err => {
+    alert('카메라 접근 권한이 필요합니다. 설정에서 카메라 권한을 허용해주세요.');
+    closeLiveCamera();
+  });
+}
+
+function updateCamTimestamp() {
+  const now = new Date();
+  const ts = now.getFullYear() + '.' +
+    String(now.getMonth()+1).padStart(2,'0') + '.' +
+    String(now.getDate()).padStart(2,'0') + ' ' +
+    String(now.getHours()).padStart(2,'0') + ':' +
+    String(now.getMinutes()).padStart(2,'0') + ':' +
+    String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('camTimestamp').textContent = ts;
+  camTimerRAF = requestAnimationFrame(updateCamTimestamp);
+}
+
+function captureVerifyPhoto() {
+  const video = document.getElementById('camVideo');
+  if (!video.videoWidth) { alert('카메라가 준비되지 않았습니다.'); return; }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+
+  // Draw current video frame
+  ctx.drawImage(video, 0, 0);
+
+  // Burn timestamp watermark (cannot be removed)
+  const now = new Date();
+  const stamp = now.getFullYear() + '.' +
+    String(now.getMonth()+1).padStart(2,'0') + '.' +
+    String(now.getDate()).padStart(2,'0') + ' ' +
+    String(now.getHours()).padStart(2,'0') + ':' +
+    String(now.getMinutes()).padStart(2,'0') + ':' +
+    String(now.getSeconds()).padStart(2,'0');
+
+  const fontSize = Math.max(20, canvas.width * 0.035);
+  ctx.font = 'bold ' + fontSize + 'px Courier New, monospace';
+
+  // Timestamp at bottom-left
+  ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+  ctx.lineWidth = 3;
+  ctx.strokeText(stamp, 16, canvas.height - 20);
+  ctx.fillStyle = 'rgba(255,255,0,0.9)';
+  ctx.fillText(stamp, 16, canvas.height - 20);
+
+  // Verification code at bottom-left (above timestamp)
+  const codeText = '인증코드: ' + camVerifyCode;
+  ctx.strokeText(codeText, 16, canvas.height - 20 - fontSize - 8);
+  ctx.fillStyle = 'rgba(255,100,100,0.95)';
+  ctx.fillText(codeText, 16, canvas.height - 20 - fontSize - 8);
+
+  // "LIVE" badge at top-right
+  ctx.font = 'bold ' + (fontSize * 0.8) + 'px sans-serif';
+  ctx.fillStyle = 'rgba(255,50,50,0.85)';
+  const liveW = ctx.measureText('LIVE').width;
+  ctx.fillRect(canvas.width - liveW - 28, 10, liveW + 16, fontSize + 4);
+  ctx.fillStyle = '#fff';
+  ctx.fillText('LIVE', canvas.width - liveW - 20, fontSize + 6);
+
+  // Set photo to verification form
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+  const img = document.getElementById('vsPhotoImg');
+  img.src = dataUrl;
+  img.style.display = 'block';
+  document.getElementById('vsPlaceholder').style.display = 'none';
+  document.getElementById('vsPhotoArea').classList.add('has-photo');
+
+  closeLiveCamera();
+}
+
+function closeLiveCamera() {
+  const overlay = document.getElementById('camOverlay');
+  overlay.style.display = 'none';
+  if (camStream) {
+    camStream.getTracks().forEach(t => t.stop());
+    camStream = null;
+  }
+  if (camTimerRAF) {
+    cancelAnimationFrame(camTimerRAF);
+    camTimerRAF = null;
+  }
+  document.getElementById('camVideo').srcObject = null;
+}
+
+// ========== GLP-1 DECLARATION ==========
+let glp1Selection = 'none';
+
+function openGlp1Declaration() {
+  document.getElementById('glp1Modal').style.display = 'flex';
+  // Reset state
+  glp1Selection = 'none';
+  document.querySelectorAll('.glp1-option').forEach((opt, i) => {
+    opt.classList.toggle('selected', i === 0);
+  });
+  document.getElementById('glp1Agree').classList.remove('checked');
+  const btn = document.getElementById('glp1ConfirmBtn');
+  btn.classList.remove('active');
+}
+
+function selectGlp1(el, value) {
+  glp1Selection = value;
+  document.querySelectorAll('.glp1-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  checkGlp1Ready();
+}
+
+function toggleGlp1Agree() {
+  document.getElementById('glp1Agree').classList.toggle('checked');
+  checkGlp1Ready();
+}
+
+function checkGlp1Ready() {
+  const agreed = document.getElementById('glp1Agree').classList.contains('checked');
+  const btn = document.getElementById('glp1ConfirmBtn');
+  if (agreed) {
+    btn.classList.add('active');
+  } else {
+    btn.classList.remove('active');
+  }
+}
+
+function confirmGlp1() {
+  closeGlp1Modal();
+  if (glp1Selection === 'current') {
+    alert('GLP-1 약물 복용자로 등록됩니다.\n약물 사용자 전용 리그로 배정됩니다.');
+  } else if (glp1Selection === 'past') {
+    alert('과거 복용 이력이 기록됩니다.\n참가 신청이 완료되었습니다!');
+  } else {
+    alert('참가 신청이 완료되었습니다!\n\n허위 신고 적발 시 참가 자격 박탈 및\n상금 환수 조치가 진행됩니다.');
+  }
+}
+
+function closeGlp1Modal() {
+  document.getElementById('glp1Modal').style.display = 'none';
+}
+
+// Close GLP-1 modal on overlay click
+document.getElementById('glp1Modal').addEventListener('click', function(e) {
+  if (e.target === this) closeGlp1Modal();
+});
+
+// ========== GLP-1 REPORT ==========
+function openReportModal() {
+  document.getElementById('reportModal').style.display = 'flex';
+  document.querySelectorAll('.report-option').forEach(o => o.classList.remove('selected'));
+  document.getElementById('reportDetail').value = '';
+}
+
+function selectReport(el) {
+  document.querySelectorAll('.report-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function submitReport() {
+  const selected = document.querySelector('.report-option.selected');
+  if (!selected) { alert('신고 사유를 선택해주세요.'); return; }
+  closeReportModal();
+  alert('신고가 접수되었습니다.\n\n운영팀에서 확인 후 조치하겠습니다.\n허위 신고 시 불이익이 있을 수 있습니다.');
+}
+
+function closeReportModal() {
+  document.getElementById('reportModal').style.display = 'none';
+}
+
+document.getElementById('reportModal').addEventListener('click', function(e) {
+  if (e.target === this) closeReportModal();
+});
+</script>
+</body>
+</html>

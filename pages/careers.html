@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="description" content="다이어트배틀 채용 - 함께 헬스케어의 미래를 만들어갈 인재를 찾습니다">
+<meta name="theme-color" content="#E53935">
+<title>채용 | 다이어트배틀</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><path d='M13 4Q27 20 13 36Q19 20 13 4Z' fill='%23E53935'/><path d='M27 4Q13 20 27 36Q21 20 27 4Z' fill='%23E53935'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --red: #E53935; --red-dark: #C62828; --red-light: #FFEBEE;
+  --dark: #111111; --gray-50: #FAFAFA; --gray-100: #F5F5F5;
+  --gray-200: #EEEEEE; --gray-600: #757575; --gray-800: #424242;
+  --white: #FFFFFF; --gradient: linear-gradient(135deg, #E53935 0%, #FF6F61 100%);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--gray-800); background: var(--white); line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px; max-width: 1140px; margin: 0 auto; padding: 0 24px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 800; font-size: 20px; color: var(--dark); text-decoration: none;
+}
+.nav-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--red); font-weight: 600; font-size: 15px; text-decoration: none; transition: opacity 0.2s;
+}
+.nav-back:hover { opacity: 0.7; }
+.page-hero {
+  padding: 140px 0 80px;
+  background: linear-gradient(135deg, #E8F5E9 0%, #FFF 60%);
+  text-align: center;
+}
+.page-hero h1 { font-size: clamp(32px, 5vw, 48px); font-weight: 900; color: var(--dark); margin-bottom: 16px; }
+.page-hero p { font-size: 18px; color: var(--gray-600); max-width: 600px; margin: 0 auto; word-break: keep-all; }
+.page-section { padding: 80px 0; }
+.page-section:nth-child(even) { background: var(--gray-50); }
+.page-section h2 {
+  font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 16px; text-align: center;
+}
+.page-section h2 .highlight { color: var(--red); }
+.section-subtitle { text-align: center; font-size: 16px; color: var(--gray-600); margin-bottom: 40px; word-break: keep-all; }
+
+/* CULTURE */
+.culture-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px; margin-top: 32px;
+}
+.culture-card {
+  background: var(--white); border-radius: 16px; padding: 32px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06); text-align: center;
+}
+.culture-card .icon { font-size: 40px; margin-bottom: 16px; }
+.culture-card h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+.culture-card p { font-size: 14px; color: var(--gray-600); word-break: keep-all; }
+
+/* JOB CARDS */
+.job-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+.job-card {
+  background: var(--white); border-radius: 16px; padding: 32px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06); display: flex; justify-content: space-between;
+  align-items: center; gap: 20px; transition: transform 0.2s;
+}
+.job-card:hover { transform: translateY(-2px); }
+.job-info h3 { font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.job-info p { font-size: 14px; color: var(--gray-600); }
+.job-tags { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.job-tag {
+  display: inline-block; background: var(--red-light); color: var(--red);
+  font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px;
+}
+.apply-btn {
+  background: var(--gradient); color: var(--white); border: none;
+  padding: 12px 28px; border-radius: 60px; font-size: 15px; font-weight: 700;
+  cursor: pointer; white-space: nowrap; transition: transform 0.2s;
+  text-decoration: none;
+}
+.apply-btn:hover { transform: translateY(-2px); }
+
+/* CTA */
+.careers-cta {
+  text-align: center; padding: 80px 0;
+  background: var(--gradient); color: var(--white);
+}
+.careers-cta h2 { color: var(--white); margin-bottom: 16px; }
+.careers-cta p { font-size: 16px; opacity: 0.9; margin-bottom: 32px; }
+.careers-cta .cta-btn {
+  display: inline-block; background: var(--white); color: var(--red);
+  font-weight: 700; font-size: 16px; padding: 16px 40px; border-radius: 60px;
+  text-decoration: none; transition: transform 0.2s;
+}
+.careers-cta .cta-btn:hover { transform: translateY(-2px); }
+
+/* FOOTER */
+.footer { background: var(--dark); color: rgba(255,255,255,0.5); padding: 60px 0 40px; }
+.footer-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+.footer-brand { max-width: 340px; }
+.footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: white; margin-bottom: 16px; }
+.footer-brand p { font-size: 14px; line-height: 1.7; word-break: keep-all; }
+.footer-links h4 { color: white; font-size: 15px; margin-bottom: 16px; }
+.footer-links a { display: block; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; padding-top: 24px; text-align: center; font-size: 13px; }
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .page-hero { padding: 110px 0 50px; }
+  .page-section { padding: 50px 0; }
+  .job-card { flex-direction: column; align-items: flex-start; }
+  .footer-inner { flex-direction: column; gap: 32px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="32" height="32" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+      다이어트배틀
+    </a>
+    <a href="index.html" class="nav-back">&larr; 홈으로</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>함께 만들어요, 건강한 세상</h1>
+    <p>다이어트배틀은 헬스케어의 미래를 함께 만들어갈<br>열정적인 팀원을 기다리고 있습니다</p>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="container">
+    <h2>우리의 <span class="highlight">문화</span></h2>
+    <div class="culture-grid">
+      <div class="culture-card">
+        <div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <h3>빠른 실행력</h3>
+        <p>아이디어를 빠르게 실행하고 시장에서 검증합니다. 완벽한 계획보다 빠른 실행을 추구합니다.</p>
+      </div>
+      <div class="culture-card">
+        <div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>수평적 소통</h3>
+        <p>직급이 아닌 아이디어의 힘으로 의사결정합니다. 누구나 자유롭게 의견을 나눕니다.</p>
+      </div>
+      <div class="culture-card">
+        <div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <h3>성장 지향</h3>
+        <p>개인의 성장이 회사의 성장입니다. 학습과 도전을 적극 지원합니다.</p>
+      </div>
+      <div class="culture-card">
+        <div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <h3>건강한 일상</h3>
+        <p>헬스케어 회사답게 팀원의 건강한 삶을 최우선으로 생각합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="container">
+    <h2>채용 <span class="highlight">포지션</span></h2>
+    <p class="section-subtitle">현재 열린 포지션입니다. 적합한 포지션이 없더라도 자유롭게 지원해주세요.</p>
+    <div class="job-list">
+      <div class="job-card">
+        <div class="job-info">
+          <h3>시니어 백엔드 개발자</h3>
+          <p>서비스 핵심 아키텍처 설계 및 배틀 시스템 개발</p>
+          <div class="job-tags"><span class="job-tag">정규직</span><span class="job-tag">경력 5년+</span><span class="job-tag">서울</span></div>
+        </div>
+        <a href="mailto:365@dietbattle.kr?subject=[채용지원] 시니어 백엔드 개발자" class="apply-btn">지원하기</a>
+      </div>
+      <div class="job-card">
+        <div class="job-info">
+          <h3>AI/ML 엔지니어</h3>
+          <p>AI 식단 분석, 3D 바디스캔 시뮬레이션 모델 개발</p>
+          <div class="job-tags"><span class="job-tag">정규직</span><span class="job-tag">경력 3년+</span><span class="job-tag">서울</span></div>
+        </div>
+        <a href="mailto:365@dietbattle.kr?subject=[채용지원] AI/ML 엔지니어" class="apply-btn">지원하기</a>
+      </div>
+      <div class="job-card">
+        <div class="job-info">
+          <h3>프로덕트 디자이너 (UX/UI)</h3>
+          <p>앱 사용자 경험 설계 및 게이미피케이션 인터페이스 디자인</p>
+          <div class="job-tags"><span class="job-tag">정규직</span><span class="job-tag">경력 3년+</span><span class="job-tag">서울</span></div>
+        </div>
+        <a href="mailto:365@dietbattle.kr?subject=[채용지원] 프로덕트 디자이너" class="apply-btn">지원하기</a>
+      </div>
+      <div class="job-card">
+        <div class="job-info">
+          <h3>그로스 마케터</h3>
+          <p>사용자 획득 전략 수립 및 퍼포먼스 마케팅 운영</p>
+          <div class="job-tags"><span class="job-tag">정규직</span><span class="job-tag">경력 2년+</span><span class="job-tag">서울</span></div>
+        </div>
+        <a href="mailto:365@dietbattle.kr?subject=[채용지원] 그로스 마케터" class="apply-btn">지원하기</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="careers-cta">
+  <div class="container">
+    <h2>원하는 포지션이 없나요?</h2>
+    <p>다이어트배틀에 관심이 있다면 언제든 이력서를 보내주세요.<br>적합한 포지션이 열리면 가장 먼저 연락드리겠습니다.</p>
+    <a href="mailto:365@dietbattle.kr?subject=[자유지원] 다이어트배틀 입사 지원" class="cta-btn">자유 지원하기</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+          다이어트배틀
+        </div>
+      </div>
+      <div class="footer-links"><h4>회사</h4><a href="about.html">회사 소개</a><a href="careers.html">채용</a><a href="partnership.html">파트너십</a><a href="contact.html">문의하기</a></div>
+      <div class="footer-links"><h4>고객지원</h4><a href="index.html">홈으로</a></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 다이어트배틀(주) Diet Battle Inc. All Rights Reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="description" content="다이어트배틀 문의하기 - 무엇이든 편하게 물어보세요">
+<meta name="theme-color" content="#E53935">
+<title>문의하기 | 다이어트배틀</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><path d='M13 4Q27 20 13 36Q19 20 13 4Z' fill='%23E53935'/><path d='M27 4Q13 20 27 36Q21 20 27 4Z' fill='%23E53935'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --red: #E53935; --red-dark: #C62828; --red-light: #FFEBEE;
+  --dark: #111111; --gray-50: #FAFAFA; --gray-100: #F5F5F5;
+  --gray-200: #EEEEEE; --gray-600: #757575; --gray-800: #424242;
+  --white: #FFFFFF; --gradient: linear-gradient(135deg, #E53935 0%, #FF6F61 100%);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--gray-800); background: var(--white); line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px; max-width: 1140px; margin: 0 auto; padding: 0 24px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 800; font-size: 20px; color: var(--dark); text-decoration: none;
+}
+.nav-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--red); font-weight: 600; font-size: 15px; text-decoration: none; transition: opacity 0.2s;
+}
+.nav-back:hover { opacity: 0.7; }
+.page-hero {
+  padding: 140px 0 80px;
+  background: linear-gradient(135deg, #FFF3E0 0%, #FFF 60%);
+  text-align: center;
+}
+.page-hero h1 { font-size: clamp(32px, 5vw, 48px); font-weight: 900; color: var(--dark); margin-bottom: 16px; }
+.page-hero p { font-size: 18px; color: var(--gray-600); max-width: 600px; margin: 0 auto; word-break: keep-all; }
+.page-section { padding: 80px 0; }
+.page-section h2 { font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 16px; text-align: center; }
+.page-section h2 .highlight { color: var(--red); }
+
+/* CONTACT CARDS */
+.contact-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px; margin-top: 40px;
+}
+.contact-card {
+  background: var(--white); border-radius: 16px; padding: 36px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06); text-align: center;
+  transition: transform 0.2s;
+}
+.contact-card:hover { transform: translateY(-4px); }
+.contact-card .icon { font-size: 44px; margin-bottom: 16px; }
+.contact-card h3 { font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+.contact-card p { font-size: 15px; color: var(--gray-600); margin-bottom: 16px; word-break: keep-all; }
+.contact-card .contact-value {
+  font-size: 17px; font-weight: 700; color: var(--red);
+  text-decoration: none; display: block;
+}
+.contact-card a.contact-value:hover { text-decoration: underline; }
+
+/* MAP / ADDRESS */
+.address-section {
+  background: var(--gray-50); padding: 80px 0;
+}
+.address-content {
+  max-width: 700px; margin: 0 auto;
+  background: var(--white); border-radius: 16px; padding: 40px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+.address-content h3 {
+  font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 24px; text-align: center;
+}
+.address-item {
+  display: flex; gap: 16px; padding: 16px 0;
+  border-bottom: 1px solid var(--gray-200);
+  align-items: flex-start;
+}
+.address-item:last-child { border-bottom: none; }
+.address-item .label {
+  font-weight: 700; color: var(--dark); min-width: 100px; font-size: 15px;
+}
+.address-item .value { font-size: 15px; color: var(--gray-800); word-break: keep-all; }
+
+/* FAQ MINI */
+.faq-section { padding: 80px 0; }
+.faq-list {
+  max-width: 700px; margin: 40px auto 0; display: flex; flex-direction: column; gap: 16px;
+}
+.faq-item {
+  background: var(--white); border-radius: 12px; padding: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04); cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+.faq-item:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.faq-q {
+  font-weight: 700; color: var(--dark); font-size: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.faq-q::before { content: 'Q.'; color: var(--red); font-weight: 800; }
+.faq-a {
+  margin-top: 12px; font-size: 15px; color: var(--gray-600);
+  padding-left: 28px; word-break: keep-all;
+}
+
+/* FOOTER */
+.footer { background: var(--dark); color: rgba(255,255,255,0.5); padding: 60px 0 40px; }
+.footer-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+.footer-brand { max-width: 340px; }
+.footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: white; margin-bottom: 16px; }
+.footer-brand p { font-size: 14px; line-height: 1.7; word-break: keep-all; }
+.footer-links h4 { color: white; font-size: 15px; margin-bottom: 16px; }
+.footer-links a { display: block; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; padding-top: 24px; text-align: center; font-size: 13px; }
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .page-hero { padding: 110px 0 50px; }
+  .page-section, .address-section, .faq-section { padding: 50px 0; }
+  .footer-inner { flex-direction: column; gap: 32px; }
+  .address-content { padding: 24px; }
+  .address-item { flex-direction: column; gap: 4px; }
+  .address-item .label { min-width: auto; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="32" height="32" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+      다이어트배틀
+    </a>
+    <a href="index.html" class="nav-back">&larr; 홈으로</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>문의하기</h1>
+    <p>무엇이든 편하게 물어보세요.<br>빠르고 친절하게 답변드리겠습니다.</p>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="container">
+    <h2><span class="highlight">연락처</span> 안내</h2>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <h3>이메일 문의</h3>
+        <p>일반 문의, 서비스 관련 질문 등<br>언제든지 이메일로 보내주세요.</p>
+        <a href="mailto:365@dietbattle.kr" class="contact-value">365@dietbattle.kr</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+          다이어트배틀
+        </div>
+      </div>
+      <div class="footer-links"><h4>회사</h4><a href="about.html">회사 소개</a><a href="careers.html">채용</a><a href="partnership.html">파트너십</a><a href="contact.html">문의하기</a></div>
+      <div class="footer-links"><h4>고객지원</h4><a href="index.html">홈으로</a></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 다이어트배틀(주) Diet Battle Inc. All Rights Reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>

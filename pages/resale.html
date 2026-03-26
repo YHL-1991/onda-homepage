@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="description" content="다이어트배틀 의류 리세일 - 다이어트 성공 후 큰 옷을 매입하고 새 사이즈 의류를 할인 제공하는 순환경제 플랫폼">
+<meta name="theme-color" content="#E53935">
+<title>의류 리세일 | 다이어트배틀</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><path d='M13 4Q27 20 13 36Q19 20 13 4Z' fill='%23E53935'/><path d='M27 4Q13 20 27 36Q21 20 27 4Z' fill='%23E53935'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --red: #E53935; --red-dark: #C62828; --red-light: #FFEBEE;
+  --dark: #111111; --gray-50: #FAFAFA; --gray-100: #F5F5F5;
+  --gray-200: #EEEEEE; --gray-600: #757575; --gray-800: #424242;
+  --white: #FFFFFF; --gradient: linear-gradient(135deg, #E53935 0%, #FF6F61 100%);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--gray-800); background: var(--white); line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+/* NAV */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px; max-width: 1140px; margin: 0 auto; padding: 0 24px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 800; font-size: 20px; color: var(--dark);
+  text-decoration: none;
+}
+.nav-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--red); font-weight: 600; font-size: 15px;
+  text-decoration: none; transition: opacity 0.2s;
+}
+.nav-back:hover { opacity: 0.7; }
+
+/* PAGE HERO */
+.page-hero {
+  padding: 140px 0 80px;
+  background: linear-gradient(135deg, #F3E5F5 0%, #FFF 60%);
+  text-align: center;
+}
+.page-hero h1 {
+  font-size: clamp(32px, 5vw, 48px); font-weight: 900; color: var(--dark);
+  margin-bottom: 16px;
+}
+.page-hero p {
+  font-size: 18px; color: var(--gray-600); max-width: 600px; margin: 0 auto;
+  word-break: keep-all;
+}
+
+/* CONTENT */
+.page-section { padding: 80px 0; }
+.page-section:nth-child(even) { background: var(--gray-50); }
+.page-section h2 {
+  font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 32px;
+  text-align: center;
+}
+.page-section h2 .highlight { color: var(--red); }
+
+/* INFO GRID */
+.info-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px; margin-top: 32px;
+}
+.info-card {
+  background: var(--white); border-radius: 16px; padding: 32px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06); transition: transform 0.2s;
+}
+.info-card:hover { transform: translateY(-4px); }
+.info-card .icon { margin-bottom: 16px; }
+.info-card .icon svg { width: 40px; height: 40px; }
+.info-card h3 { font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+.info-card p { font-size: 15px; color: var(--gray-600); word-break: keep-all; }
+
+/* CIRCULAR DESC */
+.circular-desc {
+  max-width: 760px; margin: 0 auto; text-align: center;
+  font-size: 16px; color: var(--gray-600); word-break: keep-all; line-height: 1.8;
+}
+.circular-flow {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: 16px; margin-top: 40px;
+}
+.circular-flow-item {
+  background: var(--white); border-radius: 16px; padding: 28px 24px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06); text-align: center;
+  flex: 1; min-width: 160px; max-width: 220px;
+}
+.circular-flow-item .icon { margin-bottom: 12px; }
+.circular-flow-item .icon svg { width: 36px; height: 36px; }
+.circular-flow-item h4 { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.circular-flow-item p { font-size: 13px; color: var(--gray-600); word-break: keep-all; }
+.circular-flow-arrow {
+  color: var(--red); font-size: 24px; font-weight: 700; flex-shrink: 0;
+}
+
+/* STEPS */
+.steps {
+  display: flex; align-items: flex-start; justify-content: center; flex-wrap: wrap;
+  gap: 32px; margin-top: 40px; counter-reset: step;
+}
+.step {
+  flex: 1; min-width: 200px; max-width: 280px; text-align: center;
+  position: relative;
+}
+.step-num {
+  width: 52px; height: 52px; border-radius: 50%; background: var(--gradient);
+  color: var(--white); font-size: 22px; font-weight: 800;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+.step h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+.step p { font-size: 14px; color: var(--gray-600); word-break: keep-all; }
+.step-arrow {
+  position: absolute; top: 26px; right: -24px;
+  color: var(--gray-200); font-size: 20px;
+}
+
+/* CTA */
+.cta-section {
+  padding: 80px 0; text-align: center;
+  background: linear-gradient(135deg, #F3E5F5 0%, var(--red-light) 100%);
+}
+.cta-section h2 {
+  font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 16px;
+}
+.cta-section p {
+  font-size: 16px; color: var(--gray-600); margin-bottom: 32px;
+  max-width: 500px; margin-left: auto; margin-right: auto; word-break: keep-all;
+}
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--gradient); color: var(--white);
+  font-size: 17px; font-weight: 700; padding: 16px 40px;
+  border-radius: 60px; text-decoration: none;
+  box-shadow: 0 4px 20px rgba(229,57,53,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(229,57,53,0.4); }
+
+/* FOOTER */
+.footer { background: var(--dark); color: rgba(255,255,255,0.5); padding: 60px 0 40px; }
+.footer-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+.footer-brand { max-width: 340px; }
+.footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: white; margin-bottom: 16px; }
+.footer-brand p { font-size: 14px; line-height: 1.7; word-break: keep-all; }
+.footer-links h4 { color: white; font-size: 15px; margin-bottom: 16px; }
+.footer-links a { display: block; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; padding-top: 24px; text-align: center; font-size: 13px; }
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .page-hero { padding: 110px 0 50px; }
+  .page-section { padding: 50px 0; }
+  .cta-section { padding: 50px 0; }
+  .footer-inner { flex-direction: column; gap: 32px; }
+  .circular-flow { gap: 12px; }
+  .circular-flow-arrow { display: none; }
+  .step-arrow { display: none; }
+  .steps { gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="32" height="32" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+      다이어트배틀
+    </a>
+    <a href="index.html" class="nav-back">&larr; 홈으로</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>다이어트 성공, 옷도 새로워지세요</h1>
+    <p>감량 성공자의 큰 옷을 매입하고<br>새 사이즈 의류를 할인 제공합니다</p>
+  </div>
+</section>
+
+<!-- Section 1: 순환경제 의류 플랫폼 -->
+<section class="page-section">
+  <div class="container">
+    <h2><span class="highlight">순환경제</span> 의류 플랫폼</h2>
+    <div class="circular-desc">
+      <p>다이어트에 성공하면 기존 옷이 맞지 않게 됩니다. 의류 리세일 서비스는 감량 성공자의 큰 옷을 포인트로 매입하고, 그 포인트로 새 사이즈 의류를 할인 구매할 수 있도록 연결합니다. 버려지는 옷 없이, 순환경제를 실현합니다.</p>
+    </div>
+    <div class="circular-flow">
+      <div class="circular-flow-item">
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 28l6-6 6 6" stroke="#E53935" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M20 22V10" stroke="#E53935" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="20" cy="20" r="16" stroke="#E53935" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <h4>다이어트 성공</h4>
+        <p>목표 감량 달성</p>
+      </div>
+      <div class="circular-flow-arrow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="circular-flow-item">
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 6l-5 5v5l5 3v15h16V19l5-3v-5l-5-5" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 6h16" stroke="#E53935" stroke-width="2" stroke-linecap="round"/>
+            <path d="M17 18l3 3 3-3" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h4>큰 옷 매입</h4>
+        <p>포인트로 보상</p>
+      </div>
+      <div class="circular-flow-arrow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="circular-flow-item">
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 8L7 12v22a2 2 0 002 2h22a2 2 0 002-2V12l-3-4z" stroke="#E53935" stroke-width="2" stroke-linejoin="round"/>
+            <line x1="7" y1="12" x2="33" y2="12" stroke="#E53935" stroke-width="2"/>
+            <path d="M25 16a5 5 0 01-10 0" stroke="#E53935" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4>새 사이즈 구매</h4>
+        <p>할인된 가격으로</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: 서비스 특징 -->
+<section class="page-section">
+  <div class="container">
+    <h2>서비스 <span class="highlight">특징</span></h2>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="16" stroke="#E53935" stroke-width="2" fill="none"/>
+            <text x="20" y="24" text-anchor="middle" font-size="14" font-weight="700" fill="#E53935">P</text>
+          </svg>
+        </div>
+        <h3>포인트 매입</h3>
+        <p>감량에 성공해 맞지 않게 된 의류를 포인트로 매입합니다. 옷장에 잠자고 있는 큰 옷이 가치 있는 자산이 됩니다.</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="12" stroke="#E53935" stroke-width="2.5" fill="none"/>
+            <line x1="27" y1="27" x2="34" y2="34" stroke="#E53935" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M13 18l3 3 6-6" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>품질 검수</h3>
+        <p>전문 검수팀이 등록된 의류의 상태를 꼼꼼하게 확인합니다. 검수를 통과한 의류만 리세일 플랫폼에 등록됩니다.</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 20a10 10 0 0118-6" stroke="#E53935" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M30 20a10 10 0 01-18 6" stroke="#E53935" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M28 10l2 4-4 1" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 30l-2-4 4-1" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>친환경 순환</h3>
+        <p>버려질 수 있는 의류에 새 생명을 불어넣습니다. 환경을 생각하는 지속 가능한 패션 소비를 실현합니다.</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="8" width="24" height="24" rx="4" stroke="#E53935" stroke-width="2.5" fill="none"/>
+            <path d="M16 20h8" stroke="#E53935" stroke-width="2" stroke-linecap="round"/>
+            <path d="M16 26h5" stroke="#E53935" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="26" cy="26" r="5" fill="#FFEBEE" stroke="#E53935" stroke-width="2"/>
+            <path d="M24 26h4M26 24v4" stroke="#E53935" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>새 사이즈 할인</h3>
+        <p>매입 포인트를 활용해 달라진 체형에 맞는 새 사이즈 의류를 할인된 가격에 구매할 수 있습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: 이용 방법 -->
+<section class="page-section">
+  <div class="container">
+    <h2>이용 <span class="highlight">방법</span></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <span class="step-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <h3>큰 옷 등록</h3>
+        <p>다이어트 성공 후 맞지 않는 의류를 앱에서 간편하게 등록합니다. 사진 촬영과 정보 입력만으로 완료됩니다.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <span class="step-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <h3>검수 및 포인트 지급</h3>
+        <p>전문 검수팀이 의류 상태를 확인한 뒤, 적정 포인트를 산정하여 즉시 지급합니다.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>새 사이즈 의류 구매</h3>
+        <p>지급받은 포인트로 새 사이즈에 맞는 의류를 할인된 가격에 구매합니다. 새로운 나에게 어울리는 옷을 만나보세요.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container">
+    <h2>옷장도 다이어트하세요</h2>
+    <p>감량 성공 후 맞지 않는 옷, 그냥 두지 마세요. 포인트로 바꾸고 새 옷을 할인받으세요.</p>
+    <a href="index.html" class="cta-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      자세히 알아보기
+    </a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+          다이어트배틀
+        </div>
+      </div>
+      <div class="footer-links"><h4>회사</h4><a href="about.html">회사 소개</a><a href="careers.html">채용</a><a href="partnership.html">파트너십</a><a href="contact.html">문의하기</a></div>
+      <div class="footer-links"><h4>고객지원</h4><a href="index.html">홈으로</a></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 다이어트배틀(주) Diet Battle Inc. All Rights Reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="description" content="다이어트배틀 회사 소개 - AI·XR 융합 차세대 글로벌 헬스케어 플랫폼">
+<meta name="theme-color" content="#E53935">
+<title>회사 소개 | 다이어트배틀</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><path d='M13 4Q27 20 13 36Q19 20 13 4Z' fill='%23E53935'/><path d='M27 4Q13 20 27 36Q21 20 27 4Z' fill='%23E53935'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --red: #E53935; --red-dark: #C62828; --red-light: #FFEBEE;
+  --dark: #111111; --gray-50: #FAFAFA; --gray-100: #F5F5F5;
+  --gray-200: #EEEEEE; --gray-600: #757575; --gray-800: #424242;
+  --white: #FFFFFF; --gradient: linear-gradient(135deg, #E53935 0%, #FF6F61 100%);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--gray-800); background: var(--white); line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+/* NAV */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px; max-width: 1140px; margin: 0 auto; padding: 0 24px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 800; font-size: 20px; color: var(--dark);
+  text-decoration: none;
+}
+.nav-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--red); font-weight: 600; font-size: 15px;
+  text-decoration: none; transition: opacity 0.2s;
+}
+.nav-back:hover { opacity: 0.7; }
+
+/* PAGE HERO */
+.page-hero {
+  padding: 140px 0 80px;
+  background: linear-gradient(135deg, var(--red-light) 0%, #FFF 60%);
+  text-align: center;
+}
+.page-hero h1 {
+  font-size: clamp(32px, 5vw, 48px); font-weight: 900; color: var(--dark);
+  margin-bottom: 16px;
+}
+.page-hero p {
+  font-size: 18px; color: var(--gray-600); max-width: 600px; margin: 0 auto;
+  word-break: keep-all;
+}
+
+/* CONTENT */
+.page-section { padding: 80px 0; }
+.page-section:nth-child(even) { background: var(--gray-50); }
+.page-section h2 {
+  font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 32px;
+  text-align: center;
+}
+.page-section h2 .highlight { color: var(--red); }
+
+/* INFO GRID */
+.info-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px; margin-top: 32px;
+}
+.info-card {
+  background: var(--white); border-radius: 16px; padding: 32px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06); transition: transform 0.2s;
+}
+.info-card:hover { transform: translateY(-4px); }
+.info-card .icon { font-size: 36px; margin-bottom: 16px; }
+.info-card h3 { font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+.info-card p { font-size: 15px; color: var(--gray-600); word-break: keep-all; }
+
+/* COMPANY TABLE */
+.company-info {
+  max-width: 700px; margin: 0 auto;
+  background: var(--white); border-radius: 16px; padding: 40px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+.company-info table { width: 100%; border-collapse: collapse; }
+.company-info th, .company-info td {
+  padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--gray-200);
+  font-size: 15px;
+}
+.company-info th { color: var(--dark); font-weight: 700; width: 140px; white-space: nowrap; }
+.company-info td { color: var(--gray-800); }
+
+/* VISION */
+.vision-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px; text-align: center; margin-top: 40px;
+}
+.vision-item { padding: 24px; }
+.vision-item .num {
+  font-size: 42px; font-weight: 900; color: var(--red); line-height: 1;
+}
+.vision-item .label { font-size: 15px; color: var(--gray-600); margin-top: 8px; }
+
+/* FOOTER */
+.footer { background: var(--dark); color: rgba(255,255,255,0.5); padding: 60px 0 40px; }
+.footer-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+.footer-brand { max-width: 340px; }
+.footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: white; margin-bottom: 16px; }
+.footer-brand p { font-size: 14px; line-height: 1.7; word-break: keep-all; }
+.footer-links h4 { color: white; font-size: 15px; margin-bottom: 16px; }
+.footer-links a { display: block; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; padding-top: 24px; text-align: center; font-size: 13px; }
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .page-hero { padding: 110px 0 50px; }
+  .page-section { padding: 50px 0; }
+  .footer-inner { flex-direction: column; gap: 32px; }
+  .company-info { padding: 24px; }
+  .company-info th { width: auto; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="32" height="32" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+      다이어트배틀
+    </a>
+    <a href="index.html" class="nav-back">&larr; 홈으로</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>회사 소개</h1>
+    <p>AI·XR 융합 차세대 글로벌 헬스케어 플랫폼,<br>게이미피케이션으로 다이어트의 패러다임을 바꿉니다</p>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="container">
+    <h2>다이어트배틀은 <span class="highlight">이런 회사</span>입니다</h2>
+    <div class="company-info">
+      <table>
+        <tr><th>회사명</th><td>다이어트배틀(주)</td></tr>
+        <tr><th>대표이사</th><td>권기봉</td></tr>
+        <tr><th>사업자등록번호</th><td>803-87-02320</td></tr>
+        <tr><th>소재지</th><td>서울특별시 서초구 서초대로 248, 571호</td></tr>
+        <tr><th>이메일</th><td>365@dietbattle.kr</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="container">
+    <h2>우리의 <span class="highlight">핵심 가치</span></h2>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></div>
+        <h3>미션</h3>
+        <p>게이미피케이션과 AI 기술을 활용하여 누구나 즐겁게 건강한 삶을 영위할 수 있는 세상을 만듭니다.</p>
+      </div>
+      <div class="info-card">
+        <div class="icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>비전</h3>
+        <p>글로벌 No.1 게이미피케이션 헬스케어 플랫폼이 되어, 전 세계인의 건강한 라이프스타일을 이끌어갑니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+          다이어트배틀
+        </div>
+      </div>
+      <div class="footer-links"><h4>회사</h4><a href="about.html">회사 소개</a><a href="careers.html">채용</a><a href="partnership.html">파트너십</a><a href="contact.html">문의하기</a></div>
+      <div class="footer-links"><h4>고객지원</h4><a href="index.html">홈으로</a></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 다이어트배틀(주) Diet Battle Inc. All Rights Reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>

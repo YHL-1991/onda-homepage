@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="description" content="밀키트 마켓 - AI 맞춤 식단 밀키트, 24시간 내 배송">
+<meta name="theme-color" content="#E53935">
+<title>밀키트 마켓 | 다이어트배틀</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><path d='M13 4Q27 20 13 36Q19 20 13 4Z' fill='%23E53935'/><path d='M27 4Q13 20 27 36Q21 20 27 4Z' fill='%23E53935'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --red: #E53935; --red-dark: #C62828; --red-light: #FFEBEE;
+  --dark: #111111; --gray-50: #FAFAFA; --gray-100: #F5F5F5;
+  --gray-200: #EEEEEE; --gray-600: #757575; --gray-800: #424242;
+  --white: #FFFFFF; --gradient: linear-gradient(135deg, #E53935 0%, #FF6F61 100%);
+  --green-light: #E8F5E9;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--gray-800); background: var(--white); line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+/* NAV */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px; max-width: 1140px; margin: 0 auto; padding: 0 24px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 800; font-size: 20px; color: var(--dark);
+  text-decoration: none;
+}
+.nav-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--red); font-weight: 600; font-size: 15px;
+  text-decoration: none; transition: opacity 0.2s;
+}
+.nav-back:hover { opacity: 0.7; }
+
+/* PAGE HERO */
+.page-hero {
+  padding: 140px 0 80px;
+  background: linear-gradient(135deg, #E8F5E9 0%, #FFF 60%);
+  text-align: center;
+}
+.page-hero h1 {
+  font-size: clamp(32px, 5vw, 48px); font-weight: 900; color: var(--dark);
+  margin-bottom: 16px;
+}
+.page-hero p {
+  font-size: 18px; color: var(--gray-600); max-width: 600px; margin: 0 auto;
+  word-break: keep-all;
+}
+
+/* CONTENT */
+.page-section { padding: 80px 0; }
+.page-section:nth-child(even) { background: var(--gray-50); }
+.page-section h2 {
+  font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 32px;
+  text-align: center;
+}
+.page-section h2 .highlight { color: var(--red); }
+
+/* INFO GRID */
+.info-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px; margin-top: 32px;
+}
+.info-card {
+  background: var(--white); border-radius: 16px; padding: 32px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06); transition: transform 0.2s;
+}
+.info-card:hover { transform: translateY(-4px); }
+.info-card .icon { margin-bottom: 16px; }
+.info-card .icon svg { width: 40px; height: 40px; }
+.info-card h3 { font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+.info-card p { font-size: 15px; color: var(--gray-600); word-break: keep-all; }
+
+/* AI FLOW */
+.ai-flow {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; margin-top: 40px; flex-wrap: wrap;
+}
+.ai-flow-step {
+  background: var(--white); border-radius: 16px; padding: 32px 28px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06); text-align: center;
+  flex: 1; min-width: 200px; max-width: 300px;
+}
+.ai-flow-step .icon { margin-bottom: 12px; }
+.ai-flow-step .icon svg { width: 48px; height: 48px; }
+.ai-flow-step h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+.ai-flow-step p { font-size: 14px; color: var(--gray-600); word-break: keep-all; }
+.ai-flow-arrow {
+  color: var(--red); font-size: 24px; flex-shrink: 0;
+}
+
+/* STEPS */
+.steps { max-width: 700px; margin: 40px auto 0; }
+.step-item {
+  display: flex; gap: 24px; align-items: flex-start;
+  padding: 28px 0; border-bottom: 1px solid var(--gray-200);
+}
+.step-item:last-child { border-bottom: none; }
+.step-num {
+  width: 48px; height: 48px; border-radius: 50%; background: var(--red);
+  color: var(--white); font-size: 20px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.step-content h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.step-content p { font-size: 15px; color: var(--gray-600); word-break: keep-all; }
+
+/* CTA */
+.cta-section {
+  padding: 80px 0; text-align: center;
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 50%, #E8F5E9 100%);
+}
+.cta-section h2 {
+  font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 16px;
+}
+.cta-section p {
+  font-size: 16px; color: var(--gray-600); max-width: 500px; margin: 0 auto 32px;
+  word-break: keep-all;
+}
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--red); color: var(--white); padding: 16px 36px;
+  border-radius: 50px; font-size: 16px; font-weight: 700;
+  text-decoration: none; transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 4px 16px rgba(229,57,53,0.3);
+}
+.cta-btn:hover { background: var(--red-dark); transform: translateY(-2px); }
+
+/* FOOTER */
+.footer { background: var(--dark); color: rgba(255,255,255,0.5); padding: 60px 0 40px; }
+.footer-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+.footer-brand { max-width: 340px; }
+.footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: white; margin-bottom: 16px; }
+.footer-brand p { font-size: 14px; line-height: 1.7; word-break: keep-all; }
+.footer-links h4 { color: white; font-size: 15px; margin-bottom: 16px; }
+.footer-links a { display: block; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; padding-top: 24px; text-align: center; font-size: 13px; }
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .page-hero { padding: 110px 0 50px; }
+  .page-section { padding: 50px 0; }
+  .cta-section { padding: 50px 0; }
+  .footer-inner { flex-direction: column; gap: 32px; }
+  .ai-flow { flex-direction: column; }
+  .ai-flow-arrow { transform: rotate(90deg); }
+  .step-item { gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg width="32" height="32" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+      다이어트배틀
+    </a>
+    <a href="index.html" class="nav-back">&larr; 홈으로</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>맞춤 밀키트로 건강한 식단을</h1>
+    <p>AI가 분석한 맞춤 식단, 24시간 내 배송</p>
+  </div>
+</section>
+
+<!-- Section 1: AI 맞춤 식단 -->
+<section class="page-section">
+  <div class="container">
+    <h2>AI <span class="highlight">맞춤 식단</span></h2>
+    <div class="ai-flow">
+      <div class="ai-flow-step">
+        <div class="icon">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="18" r="8" stroke="#E53935" stroke-width="2.5" fill="none"/>
+            <path d="M10 40c0-8 6-14 14-14s14 6 14 14" stroke="#E53935" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M30 16l4-4M32 8l2 4 4-2" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>사용자 프로필 분석</h3>
+        <p>체형, 목표, 배틀 진행일 등 개인 정보를 AI가 분석합니다</p>
+      </div>
+      <div class="ai-flow-arrow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#E53935" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="ai-flow-step">
+        <div class="icon">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="18" stroke="#E53935" stroke-width="2.5" fill="none"/>
+            <path d="M16 24l5 5 11-11" stroke="#E53935" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M24 6v4M24 38v4M6 24h4M38 24h4" stroke="#E53935" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>AI 맞춤 식단 추천</h3>
+        <p>배틀 몇일 차인지에 맞춰 최적의 식단과 영양소를 추천합니다</p>
+      </div>
+      <div class="ai-flow-arrow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#E53935" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="ai-flow-step">
+        <div class="icon">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="14" width="32" height="24" rx="4" stroke="#E53935" stroke-width="2.5" fill="none"/>
+            <path d="M8 22h32" stroke="#E53935" stroke-width="2"/>
+            <path d="M24 6l-6 8h12z" stroke="#E53935" stroke-width="2" stroke-linejoin="round" fill="none"/>
+            <circle cx="18" cy="30" r="3" fill="#E53935" opacity="0.3"/>
+            <circle cx="30" cy="30" r="3" fill="#E53935"/>
+          </svg>
+        </div>
+        <h3>자체 밀키트몰 배송</h3>
+        <p>다이어트배틀 자체 밀키트 몰에서 바로 주문, 빠르게 배송됩니다</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: 밀키트 특징 -->
+<section class="page-section">
+  <div class="container">
+    <h2>밀키트 <span class="highlight">특징</span></h2>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="16" stroke="#E53935" stroke-width="2.5" fill="none"/>
+            <path d="M12 28c0-6 4-10 8-14 4 4 8 8 8 14" stroke="#E53935" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M16 26c0-3 2-5 4-7 2 2 4 4 4 7" fill="#E53935" opacity="0.2"/>
+            <line x1="20" y1="14" x2="20" y2="10" stroke="#E53935" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>K-Food 기반</h3>
+        <p>한식의 건강한 레시피를 기반으로 한 밀키트로, 한국 전통의 균형 잡힌 식단을 손쉽게 즐기세요.</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="28" height="28" rx="4" stroke="#E53935" stroke-width="2.5" fill="none"/>
+            <path d="M12 20h16M20 12v16" stroke="#E53935" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="15" cy="15" r="2" fill="#E53935" opacity="0.4"/>
+            <circle cx="25" cy="15" r="2" fill="#E53935" opacity="0.4"/>
+            <circle cx="15" cy="25" r="2" fill="#E53935"/>
+            <circle cx="25" cy="25" r="2" fill="#E53935"/>
+          </svg>
+        </div>
+        <h3>영양소 자동 계산</h3>
+        <p>AI가 개인의 식습관을 분석하여 부족한 영양소를 자동으로 계산하고, 최적의 밀키트를 매칭합니다.</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="10" width="24" height="22" rx="3" stroke="#E53935" stroke-width="2.5" fill="none"/>
+            <path d="M8 18h24" stroke="#E53935" stroke-width="2"/>
+            <path d="M14 6v8M26 6v8" stroke="#E53935" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M16 24l3 3 6-6" stroke="#E53935" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>24시간 내 배송</h3>
+        <p>주문 후 24시간 이내에 신선한 밀키트가 문 앞까지 배송됩니다. 신선도를 최우선으로 관리합니다.</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 6l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z" stroke="#E53935" stroke-width="2" fill="none" stroke-linejoin="round"/>
+            <circle cx="20" cy="26" r="8" stroke="#E53935" stroke-width="2.5" fill="none"/>
+            <path d="M16 26h8M20 22v8" stroke="#E53935" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>알러지·식이제한 맞춤</h3>
+        <p>알러지 유발 성분과 식이 제한 사항을 반영하여, 안전하고 건강한 맞춤 식단을 제공합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: 이용 방법 -->
+<section class="page-section">
+  <div class="container">
+    <h2>밀키트 마켓 <span class="highlight">이용 방법</span></h2>
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>프로필 설정</h3>
+          <p>체형, 목표 체중, 알러지·식이 제한 등 개인 정보를 입력하면 AI가 맞춤 식단 설계를 시작합니다.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>AI 맞춤 식단 추천</h3>
+          <p>배틀 몇일 차인지, 현재 감량 진행 상황 등을 고려해 AI가 오늘 먹으면 좋을 식단과 영양소를 추천합니다.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>밀키트몰에서 주문</h3>
+          <p>추천된 식단에 맞는 밀키트를 다이어트배틀 자체 밀키트 몰에서 바로 주문할 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>빠른 배송</h3>
+          <p>주문한 밀키트가 신선하게 문 앞까지 배송됩니다. 조리도 간편해서 바로 건강한 한 끼를 즐길 수 있어요.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container">
+    <h2>나만의 <span class="highlight">맞춤 밀키트</span>를 시작하세요</h2>
+    <p>AI가 분석한 최적의 식단으로 건강한 다이어트를 경험해 보세요</p>
+    <a href="index.html" class="cta-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      지금 시작하기
+    </a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 4Q27 20 13 36Q19 20 13 4Z" fill="#E53935"/><path d="M27 4Q13 20 27 36Q21 20 27 4Z" fill="#E53935"/></svg>
+          다이어트배틀
+        </div>
+      </div>
+      <div class="footer-links"><h4>회사</h4><a href="about.html">회사 소개</a><a href="careers.html">채용</a><a href="partnership.html">파트너십</a><a href="contact.html">문의하기</a></div>
+      <div class="footer-links"><h4>고객지원</h4><a href="index.html">홈으로</a></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 다이어트배틀(주) Diet Battle Inc. All Rights Reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>
