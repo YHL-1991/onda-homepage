@@ -25,25 +25,6 @@ collections:
               - { label: "SEO 설명", name: "description", widget: "text" }
               - { label: "브랜드명", name: "brand_name", widget: "string" }
 
-          # ===== 네비게이션 =====
-          - label: "네비게이션"
-            name: "nav"
-            widget: "object"
-            collapsed: true
-            fields:
-              - label: "메뉴 링크"
-                name: "links"
-                widget: "list"
-                fields:
-                  - { label: "메뉴 이름", name: "text", widget: "string" }
-                  - { label: "링크 주소", name: "href", widget: "string" }
-              - label: "CTA 버튼"
-                name: "cta"
-                widget: "object"
-                fields:
-                  - { label: "버튼 텍스트", name: "text", widget: "string" }
-                  - { label: "링크 주소", name: "href", widget: "string" }
-
           # ===== 히어로 =====
           - label: "히어로 섹션 (메인 배너)"
             name: "hero"
@@ -51,39 +32,28 @@ collections:
             collapsed: true
             fields:
               - { label: "뱃지 텍스트", name: "badge", widget: "string" }
-              - { label: "제목 첫째줄", name: "headline_line1", widget: "string" }
-              - { label: "강조 텍스트 (금색)", name: "headline_highlight", widget: "string" }
-              - { label: "제목 연결어", name: "headline_line2", widget: "string" }
-              - { label: "제목 마지막줄", name: "headline_line3", widget: "string" }
-              - { label: "설명", name: "description", widget: "text" }
-              - label: "주요 버튼"
-                name: "button_primary"
-                widget: "object"
-                fields:
-                  - { label: "버튼 텍스트", name: "text", widget: "string" }
-                  - { label: "링크", name: "href", widget: "string" }
-              - label: "보조 버튼"
-                name: "button_secondary"
-                widget: "object"
-                fields:
-                  - { label: "버튼 텍스트", name: "text", widget: "string" }
-                  - { label: "링크", name: "href", widget: "string" }
-              - label: "통계 수치 (3개)"
+              - { label: "제목 첫째줄", name: "title_line1", widget: "string" }
+              - { label: "강조 텍스트 (빨간색)", name: "title_highlight", widget: "string" }
+              - { label: "설명 1줄", name: "subtitle_line1", widget: "string" }
+              - { label: "설명 2줄", name: "subtitle_line2", widget: "string" }
+              - { label: "설명 3줄", name: "subtitle_line3", widget: "string" }
+              - { label: "메인 버튼", name: "button_primary", widget: "string" }
+              - { label: "보조 버튼", name: "button_secondary", widget: "string" }
+              - label: "통계 수치"
                 name: "stats"
                 widget: "list"
                 fields:
                   - { label: "숫자", name: "number", widget: "string" }
                   - { label: "설명", name: "label", widget: "string" }
-              - { label: "체중계 표시 무게 (숫자)", name: "scale_weight", widget: "string" }
+              - { label: "폰 목업 타이틀", name: "phone_title", widget: "string" }
+              - { label: "폰 목업 서브타이틀", name: "phone_subtitle", widget: "string" }
+              - { label: "폰 목업 버튼", name: "phone_button", widget: "string" }
               - label: "플로팅 카드"
                 name: "floating_cards"
                 widget: "list"
                 fields:
-                  - { label: "라벨", name: "label", widget: "string" }
-                  - { label: "값", name: "value", widget: "string" }
-                  - { label: "단위 (%, kg 등)", name: "unit", widget: "string", required: false }
-                  - { label: "바 너비 (%)", name: "bar_width", widget: "string", required: false }
-                  - { label: "바 색상 (CSS 변수)", name: "bar_color", widget: "string", required: false }
+                  - { label: "제목", name: "title", widget: "string" }
+                  - { label: "설명", name: "description", widget: "string" }
 
           # ===== 문제 인식 =====
           - label: "문제 인식 섹션"
@@ -94,7 +64,7 @@ collections:
               - { label: "섹션 라벨", name: "label", widget: "string" }
               - { label: "제목", name: "title", widget: "string" }
               - { label: "설명", name: "description", widget: "text" }
-              - label: "문제 카드 (4개)"
+              - label: "문제 카드 (3개)"
                 name: "cards"
                 widget: "list"
                 fields:
@@ -109,147 +79,80 @@ collections:
             collapsed: true
             fields:
               - { label: "섹션 라벨", name: "label", widget: "string" }
-              - { label: "제목", name: "title", widget: "string" }
+              - { label: "제목 첫째줄", name: "title_line1", widget: "string" }
+              - { label: "강조 텍스트", name: "title_highlight", widget: "string" }
               - { label: "설명", name: "description", widget: "text" }
-              - label: "솔루션 카드 (6개)"
+              - label: "솔루션 카드 (4개)"
                 name: "cards"
                 widget: "list"
                 fields:
                   - { label: "카드 제목", name: "title", widget: "string" }
                   - { label: "카드 설명", name: "description", widget: "text" }
-                  - { label: "태그", name: "tag", widget: "string" }
 
-          # ===== 제품 라인업 =====
-          - label: "제품 라인업 섹션"
-            name: "product"
+          # ===== 이용방법 =====
+          - label: "이용방법 섹션"
+            name: "how"
             widget: "object"
             collapsed: true
             fields:
               - { label: "섹션 라벨", name: "label", widget: "string" }
-              - { label: "제목", name: "title", widget: "string" }
+              - { label: "강조 텍스트", name: "title_highlight", widget: "string" }
+              - { label: "제목 나머지", name: "title_rest", widget: "string" }
               - { label: "설명", name: "description", widget: "text" }
-              - label: "제품 목록 (5개)"
-                name: "lineup"
-                widget: "list"
-                fields:
-                  - { label: "모델명 (C/A/M/Y/X)", name: "model", widget: "string" }
-                  - { label: "제품 이름", name: "name", widget: "string" }
-                  - { label: "추천 제품 (BEST 배지)", name: "featured", widget: "boolean", default: false }
-                  - label: "기능 목록"
-                    name: "features"
-                    widget: "list"
-                    field: { label: "기능", name: "feature", widget: "string" }
-                  - { label: "가격 (숫자+콤마)", name: "price", widget: "string" }
-
-          # ===== 3단계 프로그램 =====
-          - label: "3단계 프로그램"
-            name: "program"
-            widget: "object"
-            collapsed: true
-            fields:
-              - { label: "섹션 라벨", name: "label", widget: "string" }
-              - { label: "제목", name: "title", widget: "string" }
-              - { label: "설명", name: "description", widget: "text" }
-              - label: "단계 (3개)"
+              - label: "단계 (4개)"
                 name: "steps"
                 widget: "list"
                 fields:
                   - { label: "단계 제목", name: "title", widget: "string" }
-                  - { label: "기간", name: "period", widget: "string" }
-                  - { label: "설명", name: "description", widget: "text" }
-                  - label: "태그"
-                    name: "tags"
-                    widget: "list"
-                    field: { label: "태그", name: "tag", widget: "string" }
+                  - { label: "단계 설명", name: "description", widget: "text" }
 
-          # ===== B2B =====
-          - label: "B2B 솔루션 섹션"
-            name: "b2b"
+          # ===== 보상 시스템 =====
+          - label: "보상 시스템 섹션"
+            name: "rewards"
             widget: "object"
             collapsed: true
             fields:
               - { label: "섹션 라벨", name: "label", widget: "string" }
               - { label: "제목", name: "title", widget: "string" }
               - { label: "설명", name: "description", widget: "text" }
-              - label: "B2B 카드 (3개)"
+              - label: "보상 카드 (6개)"
                 name: "cards"
                 widget: "list"
                 fields:
-                  - { label: "제목", name: "title", widget: "string" }
-                  - { label: "설명", name: "description", widget: "text" }
-                  - label: "특장점"
-                    name: "features"
-                    widget: "list"
-                    field: { label: "특장점", name: "feature", widget: "string" }
+                  - { label: "카드 제목", name: "title", widget: "string" }
+                  - { label: "카드 설명", name: "description", widget: "text" }
 
-          # ===== 기술 =====
-          - label: "기술 섹션"
-            name: "tech"
+          # ===== 후기 =====
+          - label: "베타 테스터 후기"
+            name: "testimonials"
             widget: "object"
             collapsed: true
             fields:
               - { label: "섹션 라벨", name: "label", widget: "string" }
               - { label: "제목", name: "title", widget: "string" }
-              - { label: "설명", name: "description", widget: "text" }
-              - label: "기술 카드 (4개)"
-                name: "cards"
+              - label: "후기 (3개)"
+                name: "reviews"
                 widget: "list"
                 fields:
-                  - { label: "번호/라벨", name: "number", widget: "string" }
-                  - { label: "제목", name: "title", widget: "string" }
-                  - { label: "설명", name: "description", widget: "text" }
-
-          # ===== 시장 =====
-          - label: "시장 분석 섹션"
-            name: "market"
-            widget: "object"
-            collapsed: true
-            fields:
-              - { label: "섹션 라벨", name: "label", widget: "string" }
-              - { label: "제목", name: "title", widget: "string" }
-              - { label: "설명", name: "description", widget: "text" }
-              - label: "시장 통계 (4개)"
-                name: "stats"
-                widget: "list"
-                fields:
-                  - { label: "수치", name: "value", widget: "string" }
-                  - { label: "설명 (줄바꿈: \\n)", name: "label", widget: "string" }
-              - label: "TAM/SAM/SOM (3개)"
-                name: "tam_cards"
-                widget: "list"
-                fields:
-                  - { label: "분류 (TAM/SAM/SOM)", name: "title", widget: "string" }
-                  - { label: "금액", name: "value", widget: "string" }
-                  - { label: "설명", name: "description", widget: "string" }
+                  - { label: "별점", name: "stars", widget: "string" }
+                  - { label: "후기 내용", name: "text", widget: "text" }
+                  - { label: "이름", name: "name", widget: "string" }
+                  - { label: "아바타 글자", name: "avatar", widget: "string" }
+                  - { label: "정보", name: "meta", widget: "string" }
+                  - { label: "결과", name: "result", widget: "string" }
 
           # ===== CTA =====
-          - label: "CTA 섹션 (행동 유도)"
+          - label: "CTA 섹션 (다운로드 유도)"
             name: "cta"
             widget: "object"
             collapsed: true
             fields:
-              - { label: "섹션 라벨", name: "label", widget: "string" }
-              - { label: "제목", name: "title", widget: "string" }
-              - { label: "설명", name: "description", widget: "text" }
-              - label: "주요 버튼"
-                name: "button_primary"
-                widget: "object"
-                fields:
-                  - { label: "텍스트", name: "text", widget: "string" }
-                  - { label: "링크 (mailto: 등)", name: "href", widget: "string" }
-              - label: "보조 버튼"
-                name: "button_secondary"
-                widget: "object"
-                fields:
-                  - { label: "텍스트", name: "text", widget: "string" }
-                  - { label: "링크", name: "href", widget: "string" }
-              - label: "연락처"
-                name: "contact_info"
-                widget: "object"
-                fields:
-                  - { label: "이메일", name: "email", widget: "string" }
-                  - { label: "웹사이트", name: "web", widget: "string" }
-                  - { label: "전화번호", name: "tel", widget: "string" }
+              - { label: "제목 1줄", name: "title_line1", widget: "string" }
+              - { label: "제목 2줄", name: "title_line2", widget: "string" }
+              - { label: "설명 1줄", name: "description_line1", widget: "string" }
+              - { label: "설명 2줄", name: "description_line2", widget: "string" }
+              - { label: "버튼 텍스트", name: "button_text", widget: "string" }
+              - { label: "버튼 링크", name: "button_href", widget: "string" }
 
           # ===== 푸터 =====
           - label: "푸터"
@@ -257,17 +160,4 @@ collections:
             widget: "object"
             collapsed: true
             fields:
-              - { label: "브랜드 설명", name: "brand_description", widget: "text" }
-              - label: "링크 컬럼 (3개)"
-                name: "columns"
-                widget: "list"
-                fields:
-                  - { label: "컬럼 제목", name: "title", widget: "string" }
-                  - label: "링크"
-                    name: "links"
-                    widget: "list"
-                    fields:
-                      - { label: "텍스트", name: "text", widget: "string" }
-                      - { label: "URL", name: "href", widget: "string" }
               - { label: "저작권 문구", name: "copyright", widget: "string" }
-              - { label: "주소", name: "address", widget: "string" }
